@@ -2,5 +2,6 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)tsappconfigpatchertask\2.1.3\build\TSAppConfigPatcherTask.targets" Condition="Exists('$(NuGetPackageRoot)tsappconfigpatchertask\2.1.3\build\TSAppConfigPatcherTask.targets')" />
+    <Import Project="$(NuGetPackageRoot)materialdesignthemes\5.0.0\build\MaterialDesignThemes.targets" Condition="Exists('$(NuGetPackageRoot)materialdesignthemes\5.0.0\build\MaterialDesignThemes.targets')" />
   </ImportGroup>
 </Project>

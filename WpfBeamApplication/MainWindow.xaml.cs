@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -22,106 +23,58 @@ namespace WpfBeamApplication
     /// </summary>
     public partial class MainWindow : ApplicationWindowBase
     {
-        MainWindowViewModel viewModel = new MainWindowViewModel();
+        MainWindowViewModel dataModel = new MainWindowViewModel();
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = viewModel;
-            this.InitializeDataStorage(viewModel);
+            this.DataContext = dataModel;
+            RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+            this.InitializeDataStorage(dataModel);
             if(this.GetConnectionStatus())
             { 
                 InitializeDistanceUnitDecimals();
             }
         }
 
-        private void WPFOkCreateCancel_CancelClicked(object sender, EventArgs e)
+        private void DataGrid_No_Sorting(object sender, System.Windows.Controls.DataGridSortingEventArgs e)
         {
-            this.Close();
+            e.Handled = true; // Ngăn WPF thực hiện sắp xếp
         }
-
-        private void WPFOkCreateCancel_CreateClicked(object sender, EventArgs e)
+        private void DtG_HorizontalSection_KeyDown(object sender, KeyEventArgs e)
         {
-            new Task(delegate
+            Datagrid_KeyDown(sender, e, dataModel.HorizontalSectionsIP);
+        }
+        private void Datagrid_KeyDown(object sender, KeyEventArgs e, object _MainIP)
+        {
+            var dataGrid = sender as DataGrid;
+            if (e.Key == Key.V && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
-                this.viewModel.CreateBeam();
-            }).Start();
+                if (dataGrid == null || dataGrid.SelectedCells.Count == 0) return;
+                var selectedCell = dataGrid.SelectedCells[0];
+                var rowIndex = dataGrid.Items.IndexOf(selectedCell.Item);
+                var columnIndex = selectedCell.Column.DisplayIndex;
+                dataModel.PasteIP_Input(dataGrid, rowIndex, columnIndex, _MainIP, false);
+                e.Handled = true; // Ngăn xử lý phím mặc định
+            }
         }
-
-        private void WPFOkCreateCancel_OkClicked(object sender, EventArgs e)
+        private void DtG_HorizontalSection_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            new Task(delegate
+            if (sender is DataGrid element)
             {
-                this.viewModel.CreateBeam();
-            }).Start();
-            this.Close();
-        }
+                var uniqueRows = new HashSet<HorizontalSectionIP>();
+                foreach (var cell in element.SelectedCells)
+                {
+                    if (cell.Item is HorizontalSectionIP row)
+                    {
+                        uniqueRows.Add(row);
+                    }
+                }
 
-        private void materialCatalog_SelectClicked(object sender, EventArgs e)
-        {
-            this.materialCatalog.SelectedMaterial = this.viewModel.Material;
-        }
-
-        private void materialCatalog_SelectionDone_1(object sender, EventArgs e)
-        {
-            this.viewModel.Material = this.materialCatalog.SelectedMaterial;
-        }
-
-        private void profileCatalog_SelectClicked(object sender, EventArgs e)
-        {
-            this.profileCatalog.SelectedProfile = this.viewModel.Profilename;
-        }
-
-        private void profileCatalog_SelectionDone(object sender, EventArgs e)
-        {
-            this.viewModel.Profilename = this.profileCatalog.SelectedProfile;
-        }
-
-        private void componentCatalog_SelectClicked(object sender, EventArgs e)
-        {
-            this.componentCatalog.SelectedName = this.viewModel.ComponentName;
-            this.componentCatalog.SelectedNumber = this.viewModel.ComponentNumber;
-        }
-
-        private void componentCatalog_SelectionDone(object sender, EventArgs e)
-        {
-            this.viewModel.ComponentName = this.componentCatalog.SelectedName;
-            this.viewModel.ComponentNumber = this.componentCatalog.SelectedNumber;
-        }
-
-        private void rebarCatalog_SelectClicked(object sender, EventArgs e)
-        {
-            this.rebarCatalog.SelectedRebarGrade = this.viewModel.RebarGrade;
-            this.rebarCatalog.SelectedRebarSize = this.viewModel.RebarSize;
-            this.rebarCatalog.SelectedRebarBendingRadius = this.viewModel.RebarBend;
-        }
-
-        private void rebarCatalog_SelectionDone(object sender, EventArgs e)
-        {
-            this.viewModel.RebarGrade = this.rebarCatalog.SelectedRebarGrade;
-            this.viewModel.RebarSize = this.rebarCatalog.SelectedRebarSize;
-            this.viewModel.RebarBend = this.rebarCatalog.SelectedRebarBendingRadius;
-        }
-
-        private void meshCatalog_SelectClicked(object sender, EventArgs e)
-        {
-            this.meshCatalog.SelectedMeshGrade = this.viewModel.MeshGrade;
-            this.meshCatalog.SelectedMeshName = this.viewModel.MeshName;
-        }
-
-        private void meshCatalog_SelectionDone(object sender, EventArgs e)
-        {
-            this.viewModel.MeshGrade = this.meshCatalog.SelectedMeshGrade;
-            this.viewModel.MeshName = this.meshCatalog.SelectedMeshName;
-        }
-
-        private void shapeCatalog_SelectClicked(object sender, EventArgs e)
-        {
-            this.shapeCatalog.SelectedShape = this.viewModel.ShapeName;
-        }
-
-        private void shapeCatalog_SelectionDone(object sender, EventArgs e)
-        {
-            this.viewModel.ShapeName = this.shapeCatalog.SelectedShape;
+                if (DataContext is MainWindowViewModel viewModel)
+                {
+                    viewModel.HorizontalSectionIP_Selected = new List<HorizontalSectionIP>(uniqueRows);
+                }
+            }
         }
     }
 }

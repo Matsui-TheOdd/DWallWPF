@@ -48,7 +48,7 @@ namespace iCEB_D_Wall_Drawing
             InitializeComponent();
             this.DataContext = dataModel;
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
-            InitializeDataStorage(dataModel);
+            this.InitializeDataStorage(dataModel);
 
             ModelEvents = new TSM.Events();
             ModelEvents.TeklaStructuresExit += this.ModelEvents_TeklaExit;

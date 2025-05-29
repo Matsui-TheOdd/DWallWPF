@@ -6,168 +6,187 @@ using Tekla.Structures.Dialog;
 using Tekla.Structures.Model;
 using Tekla.Structures.Model.UI;
 using Tekla.Structures.Model.Operations;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using System.Windows;
+using System;
 
 namespace WpfBeamApplication
 {
     /// <summary>
     /// Data logic for MainWindow
     /// </summary>
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : ViewModelBase
     {
-        #region Fields
-        private string partname = string.Empty;
-        private string profile = string.Empty;
-        private TD.Distance offset = new TD.Distance();
-        private string material = string.Empty;
-        private string componentname = string.Empty;
-        private int componentnumber = 0;
-        private string boltstandard = string.Empty;
-        private TD.Distance boltsize = new TD.Distance();
-        private string rebarGrade = string.Empty;
-        private string rebarSize = string.Empty;
-        private double rebarBend = 0;
-        private string meshGrade = string.Empty;
-        private string meshName = string.Empty;
-        private string shapeName = string.Empty;
-        #endregion
+        private ObservableCollection<DrawingIP> _DrawingsIP = new ObservableCollection<DrawingIP>();
+        public ObservableCollection<DrawingIP> DrawingsIP
+        {
+            get { return _DrawingsIP; }
+            set { _DrawingsIP = value; OnPropertyChanged(); }
+        }
 
-        #region Properties
-        [StructuresDialog("name",typeof(TD.String))]
-        public string Name
+        private ObservableCollection<HorizontalSectionIP> _HorizontalSectionsIP = new ObservableCollection<HorizontalSectionIP>();
+        public ObservableCollection<HorizontalSectionIP> HorizontalSectionsIP
         {
-            get { return partname; }
-            set { partname = value; OnPropertyChanged("Name"); }
+            get { return _HorizontalSectionsIP; }
+            set { _HorizontalSectionsIP = value; OnPropertyChanged(); }
         }
-        [StructuresDialog("profile", typeof(TD.String))]
-        public string Profilename
-        {
-            get { return profile; }
-            set { profile = value; OnPropertyChanged("Profilename"); }
-        }
-        [StructuresDialog("offset", typeof(TD.Distance))]
-        public TD.Distance Offset
-        {
-            get { return offset; }
-            set { offset = value; OnPropertyChanged("Offset"); }
-        }
-        [StructuresDialog("material", typeof(TD.String))]
-        public string Material
-        {
-            get { return material; }
-            set { material = value; OnPropertyChanged("Material"); }
-        }
-        [StructuresDialog("componentname", typeof(TD.String))]
-        public string ComponentName
-        {
-            get { return componentname; }
-            set { componentname = value; OnPropertyChanged("ComponentName"); }
-        }
-        [StructuresDialog("componentnumber", typeof(TD.Integer))]
-        public int ComponentNumber
-        {
-            get { return componentnumber; }
-            set { componentnumber = value; OnPropertyChanged("ComponentNumber"); }
-        }
-        [StructuresDialog("boltstandard", typeof(TD.String))]
-        public string BoltStandard
-        {
-            get { return boltstandard; }
-            set { boltstandard = value; OnPropertyChanged("BoltStandard"); }
-        }
-        [StructuresDialog("boltsize", typeof(TD.Distance))]
-        public TD.Distance BoltSize
-        {
-            get { return boltsize; }
-            set { boltsize = value; OnPropertyChanged("BoltSize"); }
-        }
-        [StructuresDialog("rebargrade", typeof(TD.String))]
-        public string RebarGrade
-        {
-            get { return rebarGrade; }
-            set { rebarGrade= value; OnPropertyChanged("RebarGrade"); }
-        }
-        [StructuresDialog("rebarsize", typeof(TD.String))]
-        public string RebarSize
-        {
-            get { return rebarSize; }
-            set { rebarSize= value; OnPropertyChanged("RebarSize"); }
-        }
-        [StructuresDialog("rebarbend", typeof(TD.Double))]
-        public double RebarBend
-        {
-            get { return rebarBend; }
-            set { rebarBend = value; OnPropertyChanged("RebarBend"); }
-        }
-        [StructuresDialog("meshgrade", typeof(TD.String))]
-        public string MeshGrade
-        {
-            get { return meshGrade; }
-            set { meshGrade = value; OnPropertyChanged("MeshGrade"); }
-        }
-        [StructuresDialog("meshname", typeof(TD.String))]
-        public string MeshName
-        {
-            get { return meshName; }
-            set { meshName = value; OnPropertyChanged("MeshName"); }
-        }
-        [StructuresDialog("shapename", typeof(TD.String))]
-        public string ShapeName
-        {
-            get { return shapeName; }
-            set { shapeName = value; OnPropertyChanged("ShapeName"); }
-        }
-        #endregion
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public List<HorizontalSectionIP> HorizontalSectionIP_Selected = new List<HorizontalSectionIP>();
 
-        protected void OnPropertyChanged(string name)
+        private string _AT_Tilte_1 = "";
+        [StructuresDialog("AT_Tilte_1", typeof(TD.String))]
+        public string AT_Tilte_1
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
+            get { return _AT_Tilte_1; }
+            set
             {
-                handler(this, new PropertyChangedEventArgs(name));
+                _AT_Tilte_1 = value;
+                OnPropertyChanged();
             }
         }
 
-        public void CreateBeam()
+        private string _AT_Tilte_2 = "";
+        [StructuresDialog("AT_Tilte_2", typeof(TD.String))]
+        public string AT_Tilte_2
         {
-            Picker picker = new Picker();
-            ArrayList PickedPoints = picker.PickPoints(Picker.PickPointEnum.PICK_TWO_POINTS, "Give beam points.. ");
-
-            CheckDefaultValues();
-
-            TSG.Point startPoint = PickedPoints[0] as TSG.Point;
-            TSG.Point endPoint = PickedPoints[1] as TSG.Point;
-
-            Beam beam = new Beam(startPoint, endPoint);
-            beam.Position.PlaneOffset = this.offset.Millimeters;
-            beam.Name = this.partname;
-            beam.Profile.ProfileString = this.profile;
-            beam.Material.MaterialString = this.material;
-            beam.Insert();
-
-            Operation.DisplayPrompt("Selected bolt " + this.boltstandard + ":" + this.boltsize.Millimeters.ToString());
-
-            new Model().CommitChanges();
+            get { return _AT_Tilte_2; }
+            set
+            {
+                _AT_Tilte_2 = value;
+                OnPropertyChanged();
+            }
         }
 
-        #region Private methods
-        /// <summary>
-        /// Gets the values from the dialog and sets the default values if needed
-        /// </summary>
-        private void CheckDefaultValues()
+        private string _AT_Tilte_3 = "";
+        [StructuresDialog("AT_Tilte_3", typeof(TD.String))]
+        public string AT_Tilte_3
         {
-            if (this.partname == string.Empty)
-                this.partname = "TEST";
-            if (this.profile == string.Empty)
-                this.profile = "HEA300";
-            if (this.material == string.Empty)
-                this.material = "STEEL_UNDEFINED";
-            if (this.offset.Millimeters == double.MinValue)
-                this.offset.Millimeters = 0;
+            get { return _AT_Tilte_3; }
+            set
+            {
+                _AT_Tilte_3 = value;
+                OnPropertyChanged();
+            }
         }
 
-        #endregion
+        public ICommand Create_Drawings { get; set; }
+        public ICommand Get_Exist_Drawings { get; set; }
+        public ICommand Create_Reports { get; set; }
+        public ICommand DelRow_HorizontalSectionIP_Command { get; set; }
+        public ICommand Suggest_Section { get; set; }
+        public ICommand Modify_Drawing { get; set; }
 
+        public void PasteIP_Input(System.Windows.Controls.DataGrid dataGrid, int selectedRow, int selectedColumn, object ListUpdate, bool isDowelStarter)
+        {
+            try
+            {
+                // Lấy dữ liệu từ Clipboard
+                string clipboardText = Clipboard.GetText();
+
+                if (string.IsNullOrWhiteSpace(clipboardText))
+                {
+                    return;
+                }
+
+                // Phân tích dữ liệu Clipboard
+                var rows = clipboardText.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                for (int i = 0; i < rows.Length; i++)
+                {
+                    var cells = rows[i].Split('\t');
+                    // Tìm hàng đích trong DataGrid
+                    int targetRow = selectedRow + i;
+
+                    if (targetRow >= dataGrid.Items.Count - 1)
+                    {
+                        if (ListUpdate is ObservableCollection<HorizontalSectionIP> _HorizontalSectionsIP)
+                        {
+                            _HorizontalSectionsIP.Add(new HorizontalSectionIP());
+                        }
+                    }
+                }
+                for (int i = 0; i < rows.Length; i++)
+                {
+                    var cells = rows[i].Split('\t');
+                    // Tìm hàng đích trong DataGrid
+                    int targetRow = selectedRow + i;
+                    // Lấy đối tượng từ DataGrid.Items
+                    var dataGridItem = dataGrid.Items[targetRow];
+
+                    if (dataGridItem is HorizontalSectionIP _HorizontalSectionsIP)
+                    {
+                        // Cập nhật từng ô trong hàng
+                        for (int j = 0; j < cells.Length; j++)
+                        {
+                            int targetColumn = selectedColumn + j;
+
+                            // Ánh xạ cột với thuộc tính trong đối tượng
+                            switch (targetColumn)
+                            {
+                                case 0: _HorizontalSectionsIP.Panel = cells[j]; break;
+                                case 1: _HorizontalSectionsIP.Level = cells[j]; break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        public MainWindowViewModel()
+        {
+            Create_Drawings = new RelayCommand<object>(
+                (p) => true,
+                (p) =>
+                {
+
+                }
+            );
+
+            Get_Exist_Drawings = new RelayCommand<object>(
+                (p) => true,
+                (p) =>
+                {
+
+                }
+            );
+
+            Create_Reports = new RelayCommand<object>(
+                (p) => true,
+                (p) =>
+                {
+
+                }
+            );
+
+            DelRow_HorizontalSectionIP_Command = new RelayCommand<object>((p) => { return HorizontalSectionIP_Selected.Count > 0 ? true : false; }, (p) =>
+            {
+                foreach (var item in HorizontalSectionIP_Selected)
+                {
+                    HorizontalSectionsIP.Remove(item);
+                    HorizontalSectionIP_Selected.Remove(item);
+                }
+            });
+
+            Suggest_Section = new RelayCommand<object>(
+               (p) => true,
+               (p) =>
+               {
+
+               }
+            );
+
+            Modify_Drawing = new RelayCommand<object>(
+                (p) => true,
+                (p) =>
+                {
+
+                }
+            );
+        }
     }
 }
