@@ -3,20 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\WpfBeamApplication\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|c:\\users\\hoangkd\\desktop\\dwallwpf\\wpfbeamapplication\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|c:\\users\\hoangkd\\desktop\\dwallwpf\\wpfbeamapplication\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|c:\\users\\hoangkd\\desktop\\dwallwpf\\wpfbeamapplication\\app.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|solutionrelative:app.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|c:\\users\\hoangkd\\desktop\\dwallwpf\\wpfbeamapplication\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|solutionrelative:app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|c:\\users\\hoangkd\\desktop\\dwallwpf\\wpfbeamapplication\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|solutionrelative:app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+      "AbsoluteMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|c:\\users\\hoangkd\\desktop\\dwallwpf\\wpfbeamapplication\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|solutionrelative:viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|c:\\users\\hoangkd\\desktop\\dwallwpf\\wpfbeamapplication\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|c:\\users\\hoangkd\\desktop\\dwallwpf\\wpfbeamapplication\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -43,6 +47,44 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\WpfBeamApplication\\App.xaml.cs",
+              "RelativeDocumentMoniker": "App.xaml.cs",
+              "ToolTip": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\WpfBeamApplication\\App.xaml.cs",
+              "RelativeToolTip": "App.xaml.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-29T04:05:30.398Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "App.xaml",
+              "DocumentMoniker": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\WpfBeamApplication\\App.xaml",
+              "RelativeDocumentMoniker": "App.xaml",
+              "ToolTip": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\WpfBeamApplication\\App.xaml",
+              "RelativeToolTip": "App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-29T04:05:29.022Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ViewModelBase.cs",
+              "DocumentMoniker": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\WpfBeamApplication\\ViewModelBase.cs",
+              "RelativeDocumentMoniker": "ViewModelBase.cs",
+              "ToolTip": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\WpfBeamApplication\\ViewModelBase.cs",
+              "RelativeToolTip": "ViewModelBase.cs",
+              "ViewState": "AgIAACAAAAAAAAAAAAAIwAgAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-29T03:59:40.876Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\WpfBeamApplication\\MainWindow.xaml",
               "RelativeDocumentMoniker": "MainWindow.xaml",
@@ -54,38 +96,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "App.xaml",
-              "DocumentMoniker": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\WpfBeamApplication\\App.xaml",
-              "RelativeDocumentMoniker": "App.xaml",
-              "ToolTip": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\WpfBeamApplication\\App.xaml",
-              "RelativeToolTip": "App.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-05-29T03:46:40.473Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "app.config",
-              "DocumentMoniker": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\WpfBeamApplication\\app.config",
-              "RelativeDocumentMoniker": "app.config",
-              "ToolTip": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\WpfBeamApplication\\app.config",
-              "RelativeToolTip": "app.config",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2025-05-29T03:46:39.493Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\WpfBeamApplication\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\WpfBeamApplication\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAkwBcAAAA7AAAAAAAAAA==",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAABkAAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-29T03:46:06.877Z",
               "EditorCaption": ""

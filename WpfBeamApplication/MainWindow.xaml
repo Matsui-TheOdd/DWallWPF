@@ -25,7 +25,6 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Secondary/MaterialDesignColor.Lime.xaml" />
-                <ResourceDictionary Source="SwitchTypeToggleButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="Button">
                 <Setter Property="Margin"
@@ -153,16 +152,6 @@
                         Value="0"></Setter>
                 <Setter Property="FontSize"
                         Value="12"></Setter>
-            </Style>
-            <Style TargetType="ToggleButton">
-                <Setter Property="Background"
-                        Value="Green"></Setter>
-                <Setter Property="Width"
-                        Value="35"></Setter>
-                <Setter Property="Height"
-                        Value="18"></Setter>
-                <Setter Property="Margin"
-                        Value="5,0,0,0"></Setter>
             </Style>
             <Style x:Key="VerticalHeaderStyle"
                    TargetType="DataGridColumnHeader">

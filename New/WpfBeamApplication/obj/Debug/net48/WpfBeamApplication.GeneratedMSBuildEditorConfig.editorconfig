@@ -1,6 +1,6 @@
 is_global = true
 build_property.RootNamespace = WpfBeamApplication
-build_property.ProjectDir = D:\TSOpenAPIExamples-2024\Model\Applications\WpfBeamApplication\
+build_property.ProjectDir = C:\Users\HoangKD\Desktop\DWallWPF\New\WpfBeamApplication\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.CsWinRTUseWindowsUIXamlProjections = false

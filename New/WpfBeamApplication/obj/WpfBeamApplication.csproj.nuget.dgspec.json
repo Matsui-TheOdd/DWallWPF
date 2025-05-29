@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\WpfBeamApplication.csproj": {}
+    "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\New\\WpfBeamApplication\\WpfBeamApplication.csproj": {}
   },
   "projects": {
-    "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\WpfBeamApplication.csproj": {
+    "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\New\\WpfBeamApplication\\WpfBeamApplication.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\WpfBeamApplication.csproj",
+        "projectUniqueName": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\New\\WpfBeamApplication\\WpfBeamApplication.csproj",
         "projectName": "WpfBeamApplication",
-        "projectPath": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\WpfBeamApplication.csproj",
-        "packagesPath": "C:\\Users\\NguyenST\\.nuget\\packages\\",
-        "outputPath": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\obj\\",
+        "projectPath": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\New\\WpfBeamApplication\\WpfBeamApplication.csproj",
+        "packagesPath": "C:\\Users\\HoangKD\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HoangKD\\Desktop\\DWallWPF\\New\\WpfBeamApplication\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\NguyenST\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\HoangKD\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -63,7 +63,7 @@
               "version": "[2024.0.4, )"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.204\\RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

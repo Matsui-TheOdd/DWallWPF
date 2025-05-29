@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WpfBeamApplication")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7232ff1769627c729f6434a4e24cbf2d54e3c7e2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+948e2a34cfefe9e94ab0f1e05027ac543117d521")]
 [assembly: System.Reflection.AssemblyProductAttribute("WpfBeamApplication")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WpfBeamApplication")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
