@@ -22,6 +22,7 @@
     <tsd:ApplicationWindowBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Fusion;component/Themes/Generic.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
@@ -312,6 +313,7 @@
                                   HorizontalAlignment="Stretch"
                                   Sorting="DataGrid_No_Sorting"
                                   AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
                                   HeadersVisibility="Column"
                                   VerticalScrollBarVisibility="Disabled"
                                   Margin="0 0 0 5"
@@ -327,31 +329,31 @@
                                 <DataGridTextColumn Binding="{Binding Panel,StringFormat=N3}"
                                                     HeaderStyle="{StaticResource VerticalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
-                                                    CellStyle="{StaticResource DefaultDataGridCell}"
+                                                    CellStyle="{StaticResource Silver}"
                                                     Header="Panel" />
 
                                 <DataGridTextColumn Binding="{Binding Tilte_1,StringFormat=N3}"
                                                     HeaderStyle="{StaticResource VerticalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
-                                                    CellStyle="{StaticResource Silver}"
+                                                    CellStyle="{StaticResource DefaultDataGridCell}"
                                                     Header="Tilte 1" />
 
                                 <DataGridTextColumn Binding="{Binding Tilte_2}"
                                                     HeaderStyle="{StaticResource VerticalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
-                                                    CellStyle="{StaticResource LightSkyBlue}"
+                                                    CellStyle="{StaticResource Silver}"
                                                     Header="Tilte 2" />
 
                                 <DataGridTextColumn Binding="{Binding Tilte_3}"
                                                     HeaderStyle="{StaticResource VerticalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
-                                                    CellStyle="{StaticResource Moccasin}"
+                                                    CellStyle="{StaticResource DefaultDataGridCell}"
                                                     Header="Tilte 3" />
 
                                 <DataGridTextColumn Binding="{Binding Comment}"
                                                     HeaderStyle="{StaticResource VerticalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
-                                                    CellStyle="{StaticResource GreenYellow}"
+                                                    CellStyle="{StaticResource Silver}"
                                                     Header="Comment" />
                             </DataGrid.Columns>
                         </DataGrid>
@@ -386,13 +388,14 @@
                                     Orientation="Horizontal">
                             <Button Content="Create Drawings"
                                     Width="110"
-                                    Margin="2,2, 10, 2"
+                                    Height="23"
                                     Command="{Binding Create_Drawings}"></Button>
                             <Button Content="Get Exist Drawings"
                                     Width="120"
-                                    Margin="2,2, 10, 2"
+                                    Height="23"
                                     Command="{Binding Get_Exist_Drawings}"></Button>
                             <Button Content="Create Reports (BBS)"
+                                    Height="23"
                                     Width="120"
                                     Command="{Binding Create_Reports}"></Button>
                         </StackPanel>
@@ -410,7 +413,7 @@
                                   VerticalAlignment="Stretch"
                                   HorizontalAlignment="Stretch"
                                   ItemsSource="{Binding HorizontalSectionsIP, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged  }"
-                                  Margin="0 0 0 12"
+                                  Margin="0 0 0 5"
                                   Sorting="DataGrid_No_Sorting"
                                   CanUserAddRows="True"
                                   AutoGenerateColumns="False"
@@ -454,11 +457,12 @@
                                     Margin="0">
                             <Button Content="Suggest Section"
                                     Width="120"
-                                    Margin="0 0 0 5"
+                                    Height="23"
                                     Command="{Binding Suggest_Section}"></Button>
-                            <Button Content="Modyfy Drawing"
+                            <Button Content="Modify Drawing"
                                     Width="120"
-                                    Margin="0 0 0 5"
+                                    Height="23"
+                                    Margin="0 5 0 0"
                                     Command="{Binding Modify_Drawing}"></Button>
                         </StackPanel>
                     </Grid>

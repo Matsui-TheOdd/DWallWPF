@@ -59,15 +59,5 @@ namespace iCEB_D_Wall_Drawing.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Logo_114x34 {
-            get {
-                object obj = ResourceManager.GetObject("Logo_114x34", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

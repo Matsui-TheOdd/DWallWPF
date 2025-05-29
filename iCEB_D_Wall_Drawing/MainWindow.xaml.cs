@@ -35,17 +35,20 @@ using System.Security.Cryptography;
 using System.Windows.Input;
 using System.Windows.Interop;
 using static System.Windows.Forms.LinkLabel;
+using Fusion;
 
 namespace iCEB_D_Wall_Drawing
 {
     public partial class MainWindow : ApplicationWindowBase
     {
         public MainWindowViewModel dataModel = new MainWindowViewModel();
+     
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = dataModel;
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+            InitializeDataStorage(dataModel);
 
             ModelEvents = new TSM.Events();
             ModelEvents.TeklaStructuresExit += this.ModelEvents_TeklaExit;
@@ -99,7 +102,7 @@ namespace iCEB_D_Wall_Drawing
         {
             ModelEvents.UnRegister();
             Environment.Exit(0);
-        }    
+        }
         #endregion
     }
 }

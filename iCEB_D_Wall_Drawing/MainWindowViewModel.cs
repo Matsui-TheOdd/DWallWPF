@@ -174,7 +174,7 @@ namespace iCEB_D_Wall_Drawing
                {
 
                }
-           );
+            );
 
             Modify_Drawing = new RelayCommand<object>(
                 (p) => true,
