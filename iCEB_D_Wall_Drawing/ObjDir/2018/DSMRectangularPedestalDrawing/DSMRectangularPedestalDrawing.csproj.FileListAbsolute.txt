@@ -1,0 +1,77 @@
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\bin\Debug\DSM Rectangular Pedestal Drawing.exe.config
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\bin\Debug\DSM Rectangular Pedestal Drawing.exe
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\bin\Debug\DSM Rectangular Pedestal Drawing.pdb
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\bin\Debug\Fusion.dll
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\bin\Debug\MoreLinq.dll
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\bin\Debug\tkisDrLibrary.dll
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\bin\Debug\MoreLinq.pdb
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\bin\Debug\MoreLinq.xml
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing.csproj.SuggestedBindingRedirects.cache
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing.exe.config
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\MainWindow.g.cs
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\App.g.cs
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing_MarkupCompile.cache
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing_MarkupCompile.lref
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\MainWindow.baml
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing.g.resources
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing.Properties.Resources.resources
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing.csproj.GenerateResource.cache
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing.csproj.CoreCompileInputs.cache
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRecta.791C61BB.Up2Date
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing.exe
+S:\1.8-Temporary\ToKimDuc\KDuc\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing.pdb
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing.csproj.AssemblyReference.cache
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing.csproj.SuggestedBindingRedirects.cache
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing.exe.config
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\MainWindow.g.cs
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\App.g.cs
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing_MarkupCompile.cache
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing_MarkupCompile.lref
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing.exe
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing.pdb
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\bin\Debug\DSM Rectangular Pedestal Drawing.exe.config
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\bin\Debug\DSM Rectangular Pedestal Drawing.exe
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\bin\Debug\DSM Rectangular Pedestal Drawing.pdb
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\bin\Debug\MoreLinq.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\bin\Debug\Tekla.Structures.Catalogs.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\bin\Debug\Tekla.Structures.Datatype.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\bin\Debug\Tekla.Structures.Dialog.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\bin\Debug\Tekla.Structures.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\bin\Debug\Tekla.Structures.Drawing.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\bin\Debug\Tekla.Structures.Model.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\bin\Debug\Tekla.Structures.Plugins.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\bin\Debug\MoreLinq.pdb
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\bin\Debug\MoreLinq.xml
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\MainWindow.baml
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing.g.resources
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing.Properties.Resources.resources
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing.csproj.GenerateResource.cache
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing.csproj.CoreCompileInputs.cache
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\DSMRectangularPedestalDrawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRecta.791C61BB.Up2Date
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\bin\Debug\DSM Rectangular Pedestal Drawing.exe.config
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\bin\Debug\DSM Rectangular Pedestal Drawing.exe
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\bin\Debug\DSM Rectangular Pedestal Drawing.pdb
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\bin\Debug\Tekla.Structures.Catalogs.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\bin\Debug\Tekla.Structures.Datatype.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\bin\Debug\Tekla.Structures.Dialog.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\bin\Debug\Tekla.Structures.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\bin\Debug\Tekla.Structures.Drawing.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\bin\Debug\Tekla.Structures.Model.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\bin\Debug\Tekla.Structures.Plugins.dll
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\bin\Debug\MoreLinq.pdb
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\bin\Debug\MoreLinq.xml
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing.csproj.AssemblyReference.cache
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing.csproj.SuggestedBindingRedirects.cache
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing.exe.config
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\MainWindow.g.cs
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\App.g.cs
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing_MarkupCompile.cache
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing_MarkupCompile.lref
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\MainWindow.baml
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing.g.resources
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing.Properties.Resources.resources
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing.csproj.GenerateResource.cache
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRectangularPedestalDrawing.csproj.CoreCompileInputs.cache
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSMRecta.791C61BB.Up2Date
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing.exe
+C:\Users\HoangKD\Downloads\iCEB_D_Wall_Drawing\ObjDir\2018\DSMRectangularPedestalDrawing\DSM Rectangular Pedestal Drawing.pdb
