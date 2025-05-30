@@ -1,0 +1,87 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|d:\\tsopenapiexamples-2024\\model\\applications\\intrafordrawing\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|d:\\tsopenapiexamples-2024\\model\\applications\\intrafordrawing\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|d:\\tsopenapiexamples-2024\\model\\applications\\intrafordrawing\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|d:\\tsopenapiexamples-2024\\model\\applications\\intrafordrawing\\sub-class\\dwallrebar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:sub-class\\dwallrebar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainWindowViewModel.cs",
+              "DocumentMoniker": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\MainWindowViewModel.cs",
+              "RelativeDocumentMoniker": "MainWindowViewModel.cs",
+              "ToolTip": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\MainWindowViewModel.cs",
+              "RelativeToolTip": "MainWindowViewModel.cs",
+              "ViewState": "AgIAAOMAAAAAAAAAAAAUwA4BAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-30T08:48:31.412Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAAQwEMAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-30T08:48:20.529Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "MainWindow.xaml",
+              "ToolTip": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-30T08:48:07.846Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DWallRebar.cs",
+              "DocumentMoniker": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\Sub-Class\\DWallRebar.cs",
+              "RelativeDocumentMoniker": "Sub-Class\\DWallRebar.cs",
+              "ToolTip": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\Sub-Class\\DWallRebar.cs",
+              "RelativeToolTip": "Sub-Class\\DWallRebar.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-30T08:46:26.957Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
