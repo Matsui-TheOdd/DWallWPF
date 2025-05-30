@@ -1,6 +1,6 @@
 is_global = true
 build_property.RootNamespace = IntraforDrawing
-build_property.ProjectDir = C:\Users\NguyenST\Downloads\IntraforDrawing\
+build_property.ProjectDir = D:\TSOpenAPIExamples-2024\Model\Applications\IntraforDrawing\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.CsWinRTUseWindowsUIXamlProjections = false

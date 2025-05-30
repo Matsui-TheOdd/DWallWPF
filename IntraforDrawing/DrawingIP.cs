@@ -22,6 +22,20 @@ namespace IntraforDrawing
             set { _Tilte_1 = value; OnPropertyChanged(); }
         }
 
+        private string _Tilte_2;
+        public string Tilte_2
+        {
+            get { return _Tilte_2; }
+            set { _Tilte_2 = value; OnPropertyChanged(); }
+        }
+
+        private string _Tilte_3;
+        public string Tilte_3
+        {
+            get { return _Tilte_3; }
+            set { _Tilte_3 = value; OnPropertyChanged(); }
+        }
+
         private string _Comment;
         public string Comment
         {

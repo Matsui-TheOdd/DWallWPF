@@ -15,7 +15,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Tekla.Structures.Dialog;
-using Tekla.Structures.Model;
 
 namespace IntraforDrawing
 {
@@ -54,7 +53,7 @@ namespace IntraforDrawing
                 var selectedCell = dataGrid.SelectedCells[0];
                 var rowIndex = dataGrid.Items.IndexOf(selectedCell.Item);
                 var columnIndex = selectedCell.Column.DisplayIndex;
-                dataModel.PasteIP_Input(dataGrid, rowIndex, columnIndex, _MainIP);
+                dataModel.PasteIP_Input(dataGrid, rowIndex, columnIndex, _MainIP, false);
                 e.Handled = true; // Ngăn xử lý phím mặc định
             }
         }

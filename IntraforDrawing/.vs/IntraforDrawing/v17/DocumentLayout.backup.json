@@ -1,103 +1,12 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|c:\\users\\nguyenst\\downloads\\intrafordrawing\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|c:\\users\\nguyenst\\downloads\\intrafordrawing\\drawingip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:drawingip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|c:\\users\\nguyenst\\downloads\\intrafordrawing\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
-      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|c:\\users\\nguyenst\\downloads\\intrafordrawing\\intrafordrawing.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
-      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:intrafordrawing.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|c:\\users\\nguyenst\\downloads\\intrafordrawing\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "WorkspaceRootPath": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\",
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 3,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "IntraforDrawing",
-              "DocumentMoniker": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\IntraforDrawing.csproj",
-              "RelativeDocumentMoniker": "IntraforDrawing.csproj",
-              "ToolTip": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\IntraforDrawing.csproj",
-              "RelativeToolTip": "IntraforDrawing.csproj",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-05-30T03:40:01.089Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\MainWindow.xaml.cs",
-              "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAkwBoAAABCAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-30T03:18:41.738Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "MainWindowViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\MainWindowViewModel.cs",
-              "RelativeDocumentMoniker": "MainWindowViewModel.cs",
-              "ToolTip": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\MainWindowViewModel.cs",
-              "RelativeToolTip": "MainWindowViewModel.cs",
-              "ViewState": "AgIAAFEAAAAAAAAAAAAtwGQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-29T06:15:01.956Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "MainWindow.xaml",
-              "ToolTip": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\MainWindow.xaml",
-              "RelativeToolTip": "MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-05-29T06:14:54.303Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "DrawingIP.cs",
-              "DocumentMoniker": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\DrawingIP.cs",
-              "RelativeDocumentMoniker": "DrawingIP.cs",
-              "ToolTip": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\DrawingIP.cs",
-              "RelativeToolTip": "DrawingIP.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-30T04:03:35.555Z",
-              "EditorCaption": ""
-            }
-          ]
-        }
-      ]
+      "DocumentGroups": []
     }
   ]
 }

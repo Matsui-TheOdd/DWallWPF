@@ -13,7 +13,7 @@
                            mc:Ignorable="d"
                            VerticalContentAlignment="Center"
                            HorizontalContentAlignment="Center"
-                           Width="800">
+                           Width="545">
     <d:UserControl.DataContext>
         <local:MainWindowViewModel />
     </d:UserControl.DataContext>
@@ -283,14 +283,10 @@
                               Margin="5,2,5,2">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2.5*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-                </Grid.RowDefinitions>
                 <GroupBox Grid.Column="0"
-                          Grid.Row="0"
                           Header="Drawing List">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -329,27 +325,51 @@
                                                     CellStyle="{StaticResource DefaultDataGridCell}"
                                                     Header="Tilte 1" />
 
+                                <DataGridTextColumn Binding="{Binding Tilte_2}"
+                                                    HeaderStyle="{StaticResource VerticalHeaderStyle}"
+                                                    ElementStyle="{StaticResource DefaultTextColumnStyle}"
+                                                    CellStyle="{StaticResource Silver}"
+                                                    Header="Tilte 2" />
+
+                                <DataGridTextColumn Binding="{Binding Tilte_3}"
+                                                    HeaderStyle="{StaticResource VerticalHeaderStyle}"
+                                                    ElementStyle="{StaticResource DefaultTextColumnStyle}"
+                                                    CellStyle="{StaticResource DefaultDataGridCell}"
+                                                    Header="Tilte 3" />
+
                                 <DataGridTextColumn Binding="{Binding Comment}"
                                                     HeaderStyle="{StaticResource VerticalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
                                                     CellStyle="{StaticResource Silver}"
-                                                    Header="Note" />
+                                                    Header="Comment" />
                             </DataGrid.Columns>
                         </DataGrid>
                         <StackPanel Grid.Row="1"
                                     Orientation="Horizontal"
-                                    Margin="0, 0, 0, 5">
-                            <UIControls:WpfFilterCheckBox AttributeName="AT_Max_Length"
-                                                          Content="Max Panel Length:" />
-                            <TextBox Height="23"
-                                     Width="80"
-                                     Text="{Binding AT_Max_Length, Mode=TwoWay}" />
-                            
-                            <UIControls:WpfFilterCheckBox AttributeName="AT_Tilte_1"
-                                                          Content="First Drawing Title:" />
-                            <TextBox Height="23"
-                                     Width="130"
-                                     Text="{Binding AT_Tilte_1, Mode=TwoWay}" />
+                                    Margin="0 0 0 5">
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0, 0, 2, 0">
+                                <UIControls:WpfFilterCheckBox AttributeName="AT_Tilte_1"
+                                                              Content="Tilte 1:" />
+                                <TextBox Height="23"
+                                         Width="60"
+                                         Text="{Binding AT_Tilte_1, Mode=TwoWay}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0, 0, 2, 0">
+                                <UIControls:WpfFilterCheckBox AttributeName="AT_Tilte_2"
+                                                              Content="Tilte 2:" />
+                                <TextBox Height="23"
+                                         Width="60"
+                                         Text="{Binding AT_Tilte_2, Mode=TwoWay}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <UIControls:WpfFilterCheckBox AttributeName="AT_Tilte_3"
+                                                              Content="Tilte 3:" />
+                                <TextBox Height="23"
+                                         Width="60"
+                                         Text="{Binding AT_Tilte_3, Mode=TwoWay}" />
+                            </StackPanel>
                         </StackPanel>
                         <StackPanel Grid.Row="2"
                                     Orientation="Horizontal">
@@ -369,7 +389,6 @@
                     </Grid>
                 </GroupBox>
                 <GroupBox Grid.Column="1"
-                          Grid.Row="0"
                           Header="Horizontal Section">
                     <Grid>
                         <Grid.RowDefinitions>
