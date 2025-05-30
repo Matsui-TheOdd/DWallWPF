@@ -4,12 +4,12 @@
 winexe
 C#
 .cs
-D:\TSOpenAPIExamples-2024\Model\Applications\IntraforDrawing\obj\Debug\net48\
+D:\Github\DWallWPF\IntraforDrawing\obj\Debug\net48\
 IntraforDrawing
 none
 false
 TRACE;DEBUG;NETFRAMEWORK;NET48;
-D:\TSOpenAPIExamples-2024\Model\Applications\IntraforDrawing\App.xaml
+D:\Github\DWallWPF\IntraforDrawing\App.xaml
 11407045341
 16-275366773
 10-24706803

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "yVHvfcWfwok=",
+  "dgSpecHash": "altM2jYU6ng=",
   "success": true,
-  "projectFilePath": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\IntraforDrawing.csproj",
+  "projectFilePath": "D:\\Github\\DWallWPF\\IntraforDrawing\\IntraforDrawing.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\NguyenST\\.nuget\\packages\\materialdesigncolors\\3.0.0\\materialdesigncolors.3.0.0.nupkg.sha512",
     "C:\\Users\\NguyenST\\.nuget\\packages\\materialdesignthemes\\5.0.0\\materialdesignthemes.5.0.0.nupkg.sha512",

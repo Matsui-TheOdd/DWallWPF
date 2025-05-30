@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows;
 using System;
+using Tekla.Structures.Drawing;
 
 namespace IntraforDrawing
 {
@@ -147,7 +148,7 @@ namespace IntraforDrawing
                         {
                             model.GetWorkPlaneHandler().SetCurrentTransformationPlane(new TransformationPlane());
                             assembly.Select();
-                            List<TSM.Part> listPanel = new List<Part> { assembly.GetMainPart() as TSM.Part };
+                            List<TSM.Part> listPanel = new List<TSM.Part> { assembly.GetMainPart() as TSM.Part };
                             ArrayList moe = assembly.GetSecondaries();
                             foreach (TSM.Part beam in moe)
                             {
@@ -158,7 +159,24 @@ namespace IntraforDrawing
                             }
 
                             int drawingSheetNumber = 1;
+                            List<string> listSplit = new List<string>();
+                            List<string> containCage = new List<string>();
+                            int numberOfFronDrawing = NumberOfFrontDrawing(listPanel, out listSplit, out containCage);
 
+                            foreach(string cage in containCage)
+                            {
+                                if (listSplit.Count == 1)
+                                {
+
+                                }
+                                CastUnitDrawing frontCage = new CastUnitDrawing(assembly.Identifier, drawingSheetNumber, "CIP_Wall");
+                                frontCage.Layout.LoadAttributes("DWALL");
+                                frontCage.Name = assembly.Name;
+                                frontCage.Title1 = titel1;
+                                frontCage.Insert();
+                                drawingSheetNumber++;
+                                titel1 = IncrementLastSegment(titel1);
+                            }
                         }
                     }
                 }
@@ -246,11 +264,16 @@ namespace IntraforDrawing
             ListAss = ListAss.OrderBy(p => p.Name).ToList();
             return ListAss;
         }
-        private int NumberOfFrontDrawing(List<TSM.Part> listPanels)
+        private int NumberOfFrontDrawing(List<TSM.Part> listPanels, out List<string> listSplit, out List<string> containCage)
         {
+            listSplit = new List<string>();
             int numberOfDrawing = 0;
 
-            List<string> containCage = new List<string>();
+            containCage = new List<string>();
+            List<DWallBeam> panel1stCage = new List<DWallBeam>();
+            List<DWallBeam> panel2ndCage = new List<DWallBeam>();
+            List<DWallBeam> panel3rdCage = new List<DWallBeam>();
+            List<DWallBeam> panel4thCage = new List<DWallBeam>();
             foreach (TSM.Part panel in listPanels)
             {
                 DWallBeam dWallBeam = new DWallBeam(panel);
@@ -258,10 +281,278 @@ namespace IntraforDrawing
                 {
                     containCage.Add(cageName);
                 }
+
+                dWallBeam.SetMaxMinPoint();
+                if (dWallBeam.panelCageNo == "1st CAGE")
+                {
+                    panel1stCage.Add(dWallBeam);
+                }
+                else if (dWallBeam.panelCageNo == "2nd CAGE")
+                {
+                    panel2ndCage.Add(dWallBeam);
+                }
+                else if (dWallBeam.panelCageNo == "3rd CAGE")
+                {
+                    panel3rdCage.Add(dWallBeam);
+                }
+                else if (dWallBeam.panelCageNo == "4th CAGE")
+                {
+                    panel4thCage.Add(dWallBeam);
+                }
             }
 
-            #region Get number of Drawing per Panel
+            containCage = containCage.DistinctBy(x => x).OrderBy(x => x).ToList();
 
+            #region Get number of Drawing per Panel
+            if (panel4thCage.Count != 0)
+            {
+                TSG.Point cage1stMaxPoint = panel1stCage[0].maxPoint;
+                TSG.Point cage1stMinPoint = panel1stCage[0].minPoint;
+                TSG.Point cage2ndMaxPoint = panel2ndCage[0].maxPoint;
+                TSG.Point cage2ndMinPoint = panel2ndCage[0].minPoint;
+                TSG.Point cage3rdMaxPoint = panel3rdCage[0].maxPoint;
+                TSG.Point cage3rdMinPoint = panel3rdCage[0].minPoint;
+                TSG.Point cage4thMaxPoint = panel4thCage[0].maxPoint;
+                TSG.Point cage4thMinPoint = panel4thCage[0].minPoint;
+
+                foreach(DWallBeam dWallBeam in panel1stCage)
+                {
+                    if (cage1stMaxPoint.Z < dWallBeam.maxPoint.Z)
+                    {
+                        cage1stMaxPoint = dWallBeam.maxPoint;
+                    }
+                    if (cage1stMinPoint.Z > dWallBeam.minPoint.Z)
+                    {
+                        cage1stMinPoint = dWallBeam.minPoint;
+                    }
+                }
+                foreach (DWallBeam dWallBeam in panel2ndCage)
+                {
+                    if (cage2ndMaxPoint.Z < dWallBeam.maxPoint.Z)
+                    {
+                        cage2ndMaxPoint = dWallBeam.maxPoint;
+                    }
+                    if (cage2ndMinPoint.Z > dWallBeam.minPoint.Z)
+                    {
+                        cage2ndMinPoint = dWallBeam.minPoint;
+                    }
+                }
+                foreach (DWallBeam dWallBeam in panel3rdCage)
+                {
+                    if (cage3rdMaxPoint.Z < dWallBeam.maxPoint.Z)
+                    {
+                        cage3rdMaxPoint = dWallBeam.maxPoint;
+                    }
+                    if (cage3rdMinPoint.Z > dWallBeam.minPoint.Z)
+                    {
+                        cage3rdMinPoint = dWallBeam.minPoint;
+                    }
+                }
+                foreach (DWallBeam dWallBeam in panel4thCage)
+                {
+                    if (cage4thMaxPoint.Z < dWallBeam.maxPoint.Z)
+                    {
+                        cage4thMaxPoint = dWallBeam.maxPoint;
+                    }
+                    if (cage4thMinPoint.Z > dWallBeam.minPoint.Z)
+                    {
+                        cage4thMinPoint = dWallBeam.minPoint;
+                    }
+                }
+
+                if (cage1stMaxPoint.Z - cage2ndMinPoint.Z < AT_Max_Length)
+                {
+                    if (cage1stMaxPoint.Z - cage3rdMinPoint.Z < AT_Max_Length)
+                    {
+                        if (cage1stMaxPoint.Z - cage4thMinPoint.Z < AT_Max_Length)
+                        {
+                            // Drawing contain cage 1234
+                            listSplit.Add("1234");
+                        }
+                        else
+                        {
+                            // Drawing contain cage 123, 4
+                            listSplit.Add("123");
+                            listSplit.Add("4");
+                        }
+                    }
+                    else
+                    {
+                        if (cage3rdMaxPoint.Z - cage4thMinPoint.Z < AT_Max_Length)
+                        {
+                            // Drawing contain cage 12, 34
+                            listSplit.Add("12");
+                            listSplit.Add("34");
+                        }
+                        else
+                        {
+                            // Drawing contain cage 12, 3, 4
+                            listSplit.Add("12");
+                            listSplit.Add("3");
+                            listSplit.Add("4");
+                        }
+                    }
+                }
+                else
+                {
+                    if (cage2ndMaxPoint.Z - cage3rdMinPoint.Z < AT_Max_Length)
+                    {
+                        if (cage2ndMaxPoint.Z - cage4thMinPoint.Z < AT_Max_Length)
+                        {
+                            // Drawing contain cage 1, 234
+                            listSplit.Add("1");
+                            listSplit.Add("234");
+                        }
+                        else
+                        {
+                            // Drawing contain cage 1, 23, 4
+                            listSplit.Add("1");
+                            listSplit.Add("23");
+                            listSplit.Add("4");
+                        }
+                    }
+                    else
+                    {
+                        if (cage3rdMaxPoint.Z - cage4thMinPoint.Z < AT_Max_Length)
+                        {
+                            // Drawing contain cage 1, 2, 34
+                            listSplit.Add("1");
+                            listSplit.Add("2");
+                            listSplit.Add("34");
+                        }
+                        else
+                        {
+                            // Drawing contain cage 1, 2, 3, 4
+                            listSplit.Add("1");
+                            listSplit.Add("2");
+                            listSplit.Add("3");
+                            listSplit.Add("4");
+                        }
+                    }
+                }
+            }
+            else if (panel3rdCage.Count != 0)
+            {
+                TSG.Point cage1stMaxPoint = panel1stCage[0].maxPoint;
+                TSG.Point cage1stMinPoint = panel1stCage[0].minPoint;
+                TSG.Point cage2ndMaxPoint = panel2ndCage[0].maxPoint;
+                TSG.Point cage2ndMinPoint = panel2ndCage[0].minPoint;
+                TSG.Point cage3rdMaxPoint = panel3rdCage[0].maxPoint;
+                TSG.Point cage3rdMinPoint = panel3rdCage[0].minPoint;
+
+                foreach (DWallBeam dWallBeam in panel1stCage)
+                {
+                    if (cage1stMaxPoint.Z < dWallBeam.maxPoint.Z)
+                    {
+                        cage1stMaxPoint = dWallBeam.maxPoint;
+                    }
+                    if (cage1stMinPoint.Z > dWallBeam.minPoint.Z)
+                    {
+                        cage1stMinPoint = dWallBeam.minPoint;
+                    }
+                }
+                foreach (DWallBeam dWallBeam in panel2ndCage)
+                {
+                    if (cage2ndMaxPoint.Z < dWallBeam.maxPoint.Z)
+                    {
+                        cage2ndMaxPoint = dWallBeam.maxPoint;
+                    }
+                    if (cage2ndMinPoint.Z > dWallBeam.minPoint.Z)
+                    {
+                        cage2ndMinPoint = dWallBeam.minPoint;
+                    }
+                }
+                foreach (DWallBeam dWallBeam in panel3rdCage)
+                {
+                    if (cage3rdMaxPoint.Z < dWallBeam.maxPoint.Z)
+                    {
+                        cage3rdMaxPoint = dWallBeam.maxPoint;
+                    }
+                    if (cage3rdMinPoint.Z > dWallBeam.minPoint.Z)
+                    {
+                        cage3rdMinPoint = dWallBeam.minPoint;
+                    }
+                }
+
+                if (cage1stMaxPoint.Z - cage2ndMinPoint.Z < AT_Max_Length)
+                {
+                    if (cage1stMaxPoint.Z - cage3rdMinPoint.Z < AT_Max_Length)
+                    {
+                        // Drawing contain cage 123
+                        listSplit.Add("123");
+                    }
+                    else
+                    {
+                        // Drawing contain cage 12, 3
+                        listSplit.Add("12");
+                        listSplit.Add("3");
+                    }
+                }
+                else
+                {
+                    if (cage2ndMaxPoint.Z - cage3rdMinPoint.Z < AT_Max_Length)
+                    {
+                        // Drawing contain cage 1, 23
+                        listSplit.Add("1");
+                        listSplit.Add("23");
+                    }
+                    else
+                    {
+                        // Drawing contain cage 1, 2, 3
+                        listSplit.Add("1");
+                        listSplit.Add("2");
+                        listSplit.Add("3");
+                    }
+                }
+            }
+            else if (panel2ndCage.Count != 0)
+            {
+                TSG.Point cage1stMaxPoint = panel1stCage[0].maxPoint;
+                TSG.Point cage1stMinPoint = panel1stCage[0].minPoint;
+                TSG.Point cage2ndMaxPoint = panel2ndCage[0].maxPoint;
+                TSG.Point cage2ndMinPoint = panel2ndCage[0].minPoint;
+
+                foreach (DWallBeam dWallBeam in panel1stCage)
+                {
+                    if (cage1stMaxPoint.Z < dWallBeam.maxPoint.Z)
+                    {
+                        cage1stMaxPoint = dWallBeam.maxPoint;
+                    }
+                    if (cage1stMinPoint.Z > dWallBeam.minPoint.Z)
+                    {
+                        cage1stMinPoint = dWallBeam.minPoint;
+                    }
+                }
+                foreach (DWallBeam dWallBeam in panel2ndCage)
+                {
+                    if (cage2ndMaxPoint.Z < dWallBeam.maxPoint.Z)
+                    {
+                        cage2ndMaxPoint = dWallBeam.maxPoint;
+                    }
+                    if (cage2ndMinPoint.Z > dWallBeam.minPoint.Z)
+                    {
+                        cage2ndMinPoint = dWallBeam.minPoint;
+                    }
+                }
+
+                if (cage1stMaxPoint.Z - cage2ndMinPoint.Z < AT_Max_Length)
+                {
+                    // Drawing contain cage 12
+                    listSplit.Add("12");
+                }
+                else
+                {
+                    // Drawing contain cage 1, 2
+                    listSplit.Add("1");
+                    listSplit.Add("2");
+                }
+            }
+            else
+            {
+                listSplit.Add("1");
+            }
+
+            numberOfDrawing = listSplit.Count * containCage.Count();
             #endregion
 
             return numberOfDrawing;

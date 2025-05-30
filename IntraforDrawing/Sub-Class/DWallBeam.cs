@@ -9,6 +9,7 @@ using TSD = Tekla.Structures.Drawing;
 using Tekla.Structures.Model;
 using Tekla.Structures;
 using MoreLinq;
+using Tekla.Structures.Geometry3d;
 
 namespace IntraforDrawing
 {
@@ -19,6 +20,8 @@ namespace IntraforDrawing
         public string panelCageNo { get; set; }
         public List<string> cageContain { get; set; }
         public List<DWallRebar> listDWallRebar { get; set; }
+        public Point maxPoint { get; set; }
+        public Point minPoint { get; set; }
         public DWallBeam(TSM.Part _panelModel)
         {
             panelModel = _panelModel;
@@ -66,6 +69,29 @@ namespace IntraforDrawing
             }
 
             cageContain = cageContain.DistinctBy(x => x).ToList();
+        }
+
+        public void SetMaxMinPoint()
+        {
+            panelModel.Select();
+            Solid solid = panelModel.GetSolid();
+            maxPoint = solid.MaximumPoint;
+            minPoint = solid.MinimumPoint;
+
+            foreach (DWallRebar dWallRebar in listDWallRebar)
+            {
+                RebarGroup rebarGroup = dWallRebar.rebarModel;
+                Solid rebarSolid = rebarGroup.GetSolid();
+
+                if (maxPoint.Z < rebarSolid.MaximumPoint.Z)
+                {
+                    maxPoint = rebarSolid.MaximumPoint;
+                }
+                if (minPoint.Z > rebarSolid.MinimumPoint.Z)
+                {
+                    minPoint = rebarSolid.MinimumPoint;
+                }
+            }
         }
     }
 }
