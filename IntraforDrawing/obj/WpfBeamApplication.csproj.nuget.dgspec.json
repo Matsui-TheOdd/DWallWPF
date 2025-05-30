@@ -1,0 +1,96 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\WpfBeamApplication.csproj": {}
+  },
+  "projects": {
+    "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\WpfBeamApplication.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\WpfBeamApplication.csproj",
+        "projectName": "WpfBeamApplication",
+        "projectPath": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\WpfBeamApplication.csproj",
+        "packagesPath": "C:\\Users\\User1\\.nuget\\packages\\",
+        "outputPath": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\User1\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "targetAlias": "net48",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net48": {
+          "targetAlias": "net48",
+          "dependencies": {
+            "MaterialDesignColors": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "MaterialDesignThemes": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Microsoft.Xaml.Behaviors.Wpf": {
+              "target": "Package",
+              "version": "[1.1.39, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
+            "TSAppConfigPatcherTask": {
+              "target": "Package",
+              "version": "[2.1.3, )"
+            },
+            "Tekla.Structures.Dialog": {
+              "target": "Package",
+              "version": "[2024.0.4, )"
+            },
+            "Tekla.Structures.Model": {
+              "target": "Package",
+              "version": "[2024.0.4, )"
+            },
+            "morelinq": {
+              "target": "Package",
+              "version": "[4.0.0, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.204\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "win-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}

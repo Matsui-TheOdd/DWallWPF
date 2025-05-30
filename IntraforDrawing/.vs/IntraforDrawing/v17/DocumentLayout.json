@@ -1,0 +1,138 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|c:\\users\\nguyenst\\downloads\\intrafordrawing\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|c:\\users\\nguyenst\\downloads\\intrafordrawing\\sub-class\\dwallbeam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:sub-class\\dwallbeam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|c:\\users\\nguyenst\\downloads\\intrafordrawing\\sub-class\\dwallrebar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:sub-class\\dwallrebar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|c:\\users\\nguyenst\\downloads\\intrafordrawing\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|c:\\users\\nguyenst\\downloads\\intrafordrawing\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|c:\\users\\nguyenst\\downloads\\intrafordrawing\\sub-class\\horizontalsectionip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:sub-class\\horizontalsectionip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|c:\\users\\nguyenst\\downloads\\intrafordrawing\\sub-class\\drawingip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:sub-class\\drawingip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DWallRebar.cs",
+              "DocumentMoniker": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\Sub-Class\\DWallRebar.cs",
+              "RelativeDocumentMoniker": "Sub-Class\\DWallRebar.cs",
+              "ToolTip": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\Sub-Class\\DWallRebar.cs",
+              "RelativeToolTip": "Sub-Class\\DWallRebar.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAADwvw4AAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-30T06:35:14.958Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DWallBeam.cs",
+              "DocumentMoniker": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\Sub-Class\\DWallBeam.cs",
+              "RelativeDocumentMoniker": "Sub-Class\\DWallBeam.cs",
+              "ToolTip": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\Sub-Class\\DWallBeam.cs",
+              "RelativeToolTip": "Sub-Class\\DWallBeam.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAqwCcAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-30T06:24:13.127Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "HorizontalSectionIP.cs",
+              "DocumentMoniker": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\Sub-Class\\HorizontalSectionIP.cs",
+              "RelativeDocumentMoniker": "Sub-Class\\HorizontalSectionIP.cs",
+              "ToolTip": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\Sub-Class\\HorizontalSectionIP.cs",
+              "RelativeToolTip": "Sub-Class\\HorizontalSectionIP.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-30T04:49:39.789Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAADwvzUAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-30T03:18:41.738Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindowViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\MainWindowViewModel.cs",
+              "RelativeDocumentMoniker": "MainWindowViewModel.cs",
+              "ToolTip": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\MainWindowViewModel.cs",
+              "RelativeToolTip": "MainWindowViewModel.cs",
+              "ViewState": "AgIAANoAAAAAAAAAAAAUwOgAAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-29T06:15:01.956Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "MainWindow.xaml",
+              "ToolTip": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-29T06:14:54.303Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DrawingIP.cs",
+              "DocumentMoniker": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\Sub-Class\\DrawingIP.cs",
+              "RelativeDocumentMoniker": "Sub-Class\\DrawingIP.cs",
+              "ToolTip": "C:\\Users\\NguyenST\\Downloads\\IntraforDrawing\\Sub-Class\\DrawingIP.cs",
+              "RelativeToolTip": "Sub-Class\\DrawingIP.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-30T04:03:35.555Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

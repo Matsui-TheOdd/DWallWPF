@@ -1,0 +1,124 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|d:\\stung\\test design\\tsopenapiexamples-2024\\model\\applications\\wpfbeamapplication\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|solutionrelative:mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|d:\\stung\\test design\\tsopenapiexamples-2024\\model\\applications\\wpfbeamapplication\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|solutionrelative:mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|d:\\stung\\test design\\tsopenapiexamples-2024\\model\\applications\\wpfbeamapplication\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|d:\\stung\\test design\\tsopenapiexamples-2024\\model\\applications\\wpfbeamapplication\\drawingip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|solutionrelative:drawingip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|d:\\stung\\test design\\tsopenapiexamples-2024\\model\\applications\\wpfbeamapplication\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|solutionrelative:viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|d:\\stung\\test design\\tsopenapiexamples-2024\\model\\applications\\wpfbeamapplication\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{798B779B-0734-D030-2877-072543F5FD9C}|WpfBeamApplication.csproj|solutionrelative:app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{74946827-37a0-11d2-a273-00c04f8ef4ff}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindowViewModel.cs",
+              "DocumentMoniker": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\MainWindowViewModel.cs",
+              "RelativeDocumentMoniker": "MainWindowViewModel.cs",
+              "ToolTip": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\MainWindowViewModel.cs",
+              "RelativeToolTip": "MainWindowViewModel.cs",
+              "ViewState": "AgIAAJ4AAAAAAAAAAAAuwKEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-29T04:44:59.28Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-29T04:44:43.983Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "MainWindow.xaml",
+              "ToolTip": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-29T04:44:25.164Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DrawingIP.cs",
+              "DocumentMoniker": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\DrawingIP.cs",
+              "RelativeDocumentMoniker": "DrawingIP.cs",
+              "ToolTip": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\DrawingIP.cs",
+              "RelativeToolTip": "DrawingIP.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-29T04:44:00.873Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ViewModelBase.cs",
+              "DocumentMoniker": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\ViewModelBase.cs",
+              "RelativeDocumentMoniker": "ViewModelBase.cs",
+              "ToolTip": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\ViewModelBase.cs",
+              "RelativeToolTip": "ViewModelBase.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-29T04:43:49.521Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "App.xaml",
+              "DocumentMoniker": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\App.xaml",
+              "RelativeDocumentMoniker": "App.xaml",
+              "ToolTip": "D:\\STung\\Test Design\\TSOpenAPIExamples-2024\\Model\\Applications\\WpfBeamApplication\\App.xaml",
+              "RelativeToolTip": "App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-29T04:43:15.884Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
