@@ -22,25 +22,18 @@ namespace IntraforDrawing
             set { _Tilte_1 = value; OnPropertyChanged(); }
         }
 
-        private string _Tilte_2;
-        public string Tilte_2
-        {
-            get { return _Tilte_2; }
-            set { _Tilte_2 = value; OnPropertyChanged(); }
-        }
-
-        private string _Tilte_3;
-        public string Tilte_3
-        {
-            get { return _Tilte_3; }
-            set { _Tilte_3 = value; OnPropertyChanged(); }
-        }
-
         private string _Comment;
         public string Comment
         {
             get { return _Comment; }
             set { _Comment = value; OnPropertyChanged(); }
+        }
+
+        public DrawingIP (string _panel, string _title_1, string _comment)
+        {
+            Panel = _panel;
+            Tilte_1 = _title_1;
+            Comment = _comment;
         }
     }
 }

@@ -19,6 +19,7 @@ namespace IntraforDrawing
         public TSD.Part panelDrawing { get; set; }
         public string panelCageNo { get; set; }
         public List<string> cageContain { get; set; }
+        public string cageContainNote { get; set; }
         public List<DWallRebar> listDWallRebar { get; set; }
         public Point maxPoint { get; set; }
         public Point minPoint { get; set; }
@@ -31,6 +32,11 @@ namespace IntraforDrawing
             string _cageNo = "";
             panelModel.GetReportProperty("CAGE_NO", ref _cageNo);
             panelCageNo = _cageNo;
+
+            string _cageName = "";
+            panelModel.GetReportProperty("CAGE_NAME", ref _cageName);
+            _cageName = _cageName.Replace("CAGE ", "");
+            cageContainNote = _cageName;
 
             ModelObjectEnumerator moe = panelModel.GetReinforcements();
             while (moe.MoveNext())
@@ -57,6 +63,11 @@ namespace IntraforDrawing
             panelModel.GetReportProperty("CAGE_NO", ref _cageNo);
             panelCageNo = _cageNo;
 
+            string _cageName = "";
+            panelModel.GetReportProperty("CAGE_NAME", ref _cageName);
+            _cageName = _cageName.Replace("CAGE ", "");
+            cageContainNote = _cageName;
+
             ModelObjectEnumerator moe = panelModel.GetReinforcements();
             while (moe.MoveNext())
             {
@@ -70,8 +81,7 @@ namespace IntraforDrawing
 
             cageContain = cageContain.DistinctBy(x => x).ToList();
         }
-
-        public void SetMaxMinPoint()
+        public void SetMaxMinPointByZ()
         {
             panelModel.Select();
             Solid solid = panelModel.GetSolid();
@@ -88,6 +98,28 @@ namespace IntraforDrawing
                     maxPoint = rebarSolid.MaximumPoint;
                 }
                 if (minPoint.Z > rebarSolid.MinimumPoint.Z)
+                {
+                    minPoint = rebarSolid.MinimumPoint;
+                }
+            }
+        }
+        public void SetMaxMinPointByY()
+        {
+            panelModel.Select();
+            Solid solid = panelModel.GetSolid();
+            maxPoint = solid.MaximumPoint;
+            minPoint = solid.MinimumPoint;
+
+            foreach (DWallRebar dWallRebar in listDWallRebar)
+            {
+                RebarGroup rebarGroup = dWallRebar.rebarModel;
+                Solid rebarSolid = rebarGroup.GetSolid();
+
+                if (maxPoint.Y < rebarSolid.MaximumPoint.Y)
+                {
+                    maxPoint = rebarSolid.MaximumPoint;
+                }
+                if (minPoint.Y > rebarSolid.MinimumPoint.Y)
                 {
                     minPoint = rebarSolid.MinimumPoint;
                 }

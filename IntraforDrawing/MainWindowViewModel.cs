@@ -6,7 +6,9 @@ using TD = Tekla.Structures.Datatype;
 using TSG = Tekla.Structures.Geometry3d;
 using Tekla.Structures.Dialog;
 using Tekla.Structures.Model;
+using Tekla.Structures.Drawing;
 using TSM = Tekla.Structures.Model;
+using TSD = Tekla.Structures.Drawing;
 using TSMUI = Tekla.Structures.Model.UI;
 using Tekla.Structures.Model.Operations;
 using System.Collections.Generic;
@@ -14,7 +16,9 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows;
 using System;
-using Tekla.Structures.Drawing;
+using Tekla.Structures.Geometry3d;
+using static Tekla.Structures.Drawing.StraightDimensionSet;
+using System.Windows.Controls;
 
 namespace IntraforDrawing
 {
@@ -163,19 +167,56 @@ namespace IntraforDrawing
                             List<string> containCage = new List<string>();
                             int numberOfFronDrawing = NumberOfFrontDrawing(listPanel, out listSplit, out containCage);
 
-                            foreach(string cage in containCage)
+                            foreach (string cage in containCage)
                             {
                                 if (listSplit.Count == 1)
                                 {
+                                    // Full in 1 drawing
+                                    CastUnitDrawing frontCage = new CastUnitDrawing(assembly.Identifier, drawingSheetNumber, "CIP_Wall");
+                                    frontCage.Layout.LoadAttributes("DWALL");
+                                    frontCage.Name = assembly.Name;
+                                    frontCage.Title1 = titel1;
+                                    frontCage.SetUserProperty("COMMENT", "Front View");
+                                    frontCage.Insert();
+                                    DrawingIP newIP = new DrawingIP(assembly.Name, titel1, "Front View");
+                                    DrawingsIP.Add(newIP);
 
+                                    drawingSheetNumber++;
+                                    titel1 = IncrementLastSegment(titel1);
+                                    FrontViewDrawing(ref frontCage, listPanel, cage, listSplit[0], true, true);
                                 }
-                                CastUnitDrawing frontCage = new CastUnitDrawing(assembly.Identifier, drawingSheetNumber, "CIP_Wall");
-                                frontCage.Layout.LoadAttributes("DWALL");
-                                frontCage.Name = assembly.Name;
-                                frontCage.Title1 = titel1;
-                                frontCage.Insert();
-                                drawingSheetNumber++;
-                                titel1 = IncrementLastSegment(titel1);
+                                else
+                                {
+                                    for (int i = 0; i < listSplit.Count; i++)
+                                    {
+                                        CastUnitDrawing frontCage = new CastUnitDrawing(assembly.Identifier, drawingSheetNumber, "CIP_Wall");
+                                        frontCage.Layout.LoadAttributes("DWALL");
+                                        frontCage.Name = assembly.Name;
+                                        frontCage.Title1 = titel1;
+                                        frontCage.SetUserProperty("COMMENT", "Front View");
+                                        frontCage.Insert();
+                                        DrawingIP newIP = new DrawingIP(assembly.Name, titel1, "Front View");
+                                        DrawingsIP.Add(newIP);
+
+                                        drawingSheetNumber++;
+                                        titel1 = IncrementLastSegment(titel1);
+                                        if (i == 0)
+                                        {
+                                            FrontViewDrawing(ref frontCage, listPanel, cage, listSplit[i], true, false);
+                                            // First drawing
+                                        }
+                                        else if (i == listSplit.Count - 1)
+                                        {
+                                            FrontViewDrawing(ref frontCage, listPanel, cage, listSplit[i], false, true);
+                                            // Middle drawing
+                                        }
+                                        else
+                                        {
+                                            FrontViewDrawing(ref frontCage, listPanel, cage, listSplit[i], false, false);
+                                            // Last drawing
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -241,6 +282,17 @@ namespace IntraforDrawing
                 throw new ArgumentException("The last segment is not a valid number.");
             }
         }
+        private TransformationPlane GetTransformationPlane(TSD.View view)
+        {
+            CoordinateSystem viewcoo = view.ViewCoordinateSystem;
+            CoordinateSystem Displaycoo = view.DisplayCoordinateSystem;
+            TransformationPlane transformationPlane = new TransformationPlane(viewcoo.Origin, Displaycoo.AxisX, Displaycoo.AxisY);
+            return transformationPlane;
+        }
+        private bool RangesOverlap(double start1, double end1, double start2, double end2)
+        {
+            return Math.Round(start1) < Math.Round(end2) && Math.Round(start2) < Math.Round(end1);
+        }
         private List<Assembly> GetAssemblyList()
         {
             TSMUI.ModelObjectSelector mos = new TSMUI.ModelObjectSelector();
@@ -282,7 +334,7 @@ namespace IntraforDrawing
                     containCage.Add(cageName);
                 }
 
-                dWallBeam.SetMaxMinPoint();
+                dWallBeam.SetMaxMinPointByZ();
                 if (dWallBeam.panelCageNo == "1st CAGE")
                 {
                     panel1stCage.Add(dWallBeam);
@@ -315,7 +367,7 @@ namespace IntraforDrawing
                 TSG.Point cage4thMaxPoint = panel4thCage[0].maxPoint;
                 TSG.Point cage4thMinPoint = panel4thCage[0].minPoint;
 
-                foreach(DWallBeam dWallBeam in panel1stCage)
+                foreach (DWallBeam dWallBeam in panel1stCage)
                 {
                     if (cage1stMaxPoint.Z < dWallBeam.maxPoint.Z)
                     {
@@ -556,6 +608,292 @@ namespace IntraforDrawing
             #endregion
 
             return numberOfDrawing;
+        }
+        private void FrontViewDrawing(ref CastUnitDrawing drawing, List<TSM.Part> listPanel, string cageName, string listSplit, bool isContainTop, bool isContainBot)
+        {
+            DrawingHandler dh = new DrawingHandler();
+            if (dh.GetConnectionStatus())
+            {
+                dh.SetActiveDrawing(drawing);
+
+                #region Get Showing Panel
+                List<string> cageNos = listSplit.ToCharArray()
+                                   .Select(c => c.ToString())
+                                   .ToList();
+
+                List<DWallBeam> listShowPanel = new List<DWallBeam>();
+                List<DWallBeam> listFullPanel = new List<DWallBeam>();
+                foreach (TSM.Part _panel in listPanel)
+                {
+                    DWallBeam dWallBeam = new DWallBeam(_panel);
+                    if (dWallBeam.cageContain.Contains(cageName))
+                    {
+                        listFullPanel.Add(dWallBeam);
+                        foreach (string cageNo in cageNos)
+                        {
+                            if (dWallBeam.panelCageNo.Contains(cageNo))
+                            {
+                                listShowPanel.Add(dWallBeam);
+                                break;
+                            }
+                        }
+                    }
+                }
+                #endregion
+
+                #region Clear View
+                DrawingObjectEnumerator views = drawing.GetSheet().GetAllObjects(typeof(TSD.View));
+                while (views.MoveNext())
+                {
+                    if (views.Current is TSD.View view)
+                    {
+                        view.Delete();
+                    }
+                }
+                #endregion
+
+                #region Create Top View
+                TSD.View.ViewAttributes viewAttributes = new TSD.View.ViewAttributes("Top View");
+                TSD.View.CreateTopView(drawing, new TSG.Point(0, 0, 0), viewAttributes, out TSD.View topView);
+                Macro.Load_ViewAttribute_Filter_And_EditSetting(topView, "Top View");
+
+                model.GetWorkPlaneHandler().SetCurrentTransformationPlane(new TransformationPlane());
+                model.GetWorkPlaneHandler().SetCurrentTransformationPlane(GetTransformationPlane(topView));
+                #endregion
+
+                #region Create Front View
+                Beam panel = listShowPanel[0].panelModel as Beam;
+                panel.Select();
+                TSG.Point _startPoint = new TSG.Point(panel.StartPoint.X, panel.StartPoint.Y, 0);
+                TSG.Point _endPoint = new TSG.Point(panel.EndPoint.X, panel.EndPoint.Y, 0);
+                TSG.Vector beamStartEnd = new TSG.Vector(_endPoint - _startPoint).GetNormal();
+                TSG.Vector pendicularBeam = beamStartEnd.Cross(vZ);
+
+                TransformationPlane tPlane = new TransformationPlane(_startPoint, beamStartEnd, pendicularBeam);
+                model.GetWorkPlaneHandler().SetCurrentTransformationPlane(tPlane);
+
+                panel.Select();
+
+                TSG.Point startPoint = new TSG.Point(panel.StartPoint.X, panel.StartPoint.Y, 0);
+                TSG.Point endPoint = new TSG.Point(panel.EndPoint.X, panel.EndPoint.Y, 0);
+
+                Solid beamSolid = panel.GetSolid();
+
+                TSG.Point topLeftPoint = new TSG.Point(panel.StartPoint.X, beamSolid.MaximumPoint.Y, 0);
+                TSG.Point topRightPoint = new TSG.Point(panel.EndPoint.X, beamSolid.MaximumPoint.Y, 0);
+                TSG.Point botLeftPoint = new TSG.Point(panel.StartPoint.X, beamSolid.MinimumPoint.Y, 0);
+                TSG.Point botRightPoint = new TSG.Point(panel.EndPoint.X, beamSolid.MinimumPoint.Y, 0);
+
+                TSD.View.ViewAttributes frontViewAttributes = new TSD.View.ViewAttributes("Front View");
+                SectionMarkBase.SectionMarkAttributes sectionMarkAttributes = new SectionMarkBase.SectionMarkAttributes("DWall-NoMark");
+                TSD.View.CreateSectionView(topView, botLeftPoint, botRightPoint, new TSG.Point(210, 117, 0), beamSolid.MaximumPoint.Y - beamSolid.MinimumPoint.Y, 0, frontViewAttributes, sectionMarkAttributes, out TSD.View frontView, out SectionMark checkSectionMark);
+                Macro.Load_ViewAttribute_Filter_And_EditSetting(frontView, "Front View");
+                frontView.Modify();
+                frontView.Select();
+                #endregion
+
+                #region Modify Front View Range
+                model.GetWorkPlaneHandler().SetCurrentTransformationPlane(new TransformationPlane());
+                model.GetWorkPlaneHandler().SetCurrentTransformationPlane(GetTransformationPlane(frontView));
+
+                TSG.Point topPoint = new TSG.Point(0, double.MinValue, 0);
+                TSG.Point botPoint = new TSG.Point(0, double.MaxValue, 0);
+                foreach (DWallBeam dWall in listShowPanel)
+                {
+                    dWall.SetMaxMinPointByY();
+                    if (topPoint.Y < dWall.maxPoint.Y)
+                    {
+                        topPoint = dWall.maxPoint;
+                    }
+                    if (botPoint.Y > dWall.minPoint.Y)
+                    {
+                        botPoint = dWall.minPoint;
+                    }
+                }
+
+                TSG.Point topPanelPoint = new TSG.Point(0, double.MinValue, 0);
+                TSG.Point botPanelPoint = new TSG.Point(0, double.MaxValue, 0);
+                foreach (DWallBeam dWall in listFullPanel)
+                {
+                    dWall.SetMaxMinPointByY();
+                    if (topPanelPoint.Y < dWall.maxPoint.Y)
+                    {
+                        topPanelPoint = dWall.maxPoint;
+                    }
+                    if (botPanelPoint.Y > dWall.minPoint.Y)
+                    {
+                        botPanelPoint = dWall.minPoint;
+                    }
+                } 
+
+                if (!isContainTop)
+                {
+                    frontView.RestrictionBox.MaxPoint.Y = frontView.RestrictionBox.MaxPoint.Y - (topPanelPoint.Y - topPoint.Y) + 500;
+                }
+                if (!isContainBot)
+                {
+                    frontView.RestrictionBox.MinPoint.Y = frontView.RestrictionBox.MinPoint.Y + (botPoint.Y - botPanelPoint.Y) - 500;
+                }
+                frontView.Modify();
+
+                model.GetWorkPlaneHandler().SetCurrentTransformationPlane(new TransformationPlane());
+                TSG.Point centerView = frontView.ExtremaCenter;
+                double moveDown = centerView.Y - 117;
+                frontView.Origin = frontView.Origin - vY * moveDown;
+                frontView.Modify();
+                #endregion
+                EditFrontView(frontView, listPanel, cageName, listSplit, isContainTop, isContainBot);
+                topView.Delete();
+                dh.CloseActiveDrawing(true);
+            }
+        }
+        private void EditFrontView(TSD.View frontView, List<TSM.Part> listPanel, string cageName, string listSplit, bool isContainTop, bool isContainBot)
+        {
+            model.GetWorkPlaneHandler().SetCurrentTransformationPlane(new TransformationPlane());
+            model.GetWorkPlaneHandler().SetCurrentTransformationPlane(GetTransformationPlane(frontView));
+            frontView.Select();
+
+            StraightDimensionSetHandler sdsh = new StraightDimensionSetHandler();
+            StraightDimensionSetAttributes StraightDimAttribute = new StraightDimensionSetAttributes("DWall-Dim");
+
+            #region Get Panel
+            List<string> cageNos = listSplit.ToCharArray()
+                               .Select(c => c.ToString())
+                               .ToList();
+
+            List<DWallBeam> listShowPanel = new List<DWallBeam>();
+            List<DWallBeam> listFullPanel = new List<DWallBeam>();
+            foreach (TSM.Part _panel in listPanel)
+            {
+                DWallBeam dWallBeam = new DWallBeam(_panel);
+                if (dWallBeam.cageContain.Contains(cageName))
+                {
+                    listFullPanel.Add(dWallBeam);
+                    foreach (string cageNo in cageNos)
+                    {
+                        if (dWallBeam.panelCageNo.Contains(cageNo))
+                        {
+                            listShowPanel.Add(dWallBeam);
+                            break;
+                        }
+                    }
+                }
+            }
+            #endregion
+
+            #region Indicate Cage
+            DrawingObjectEnumerator fullReinforcements = frontView.GetAllObjects(typeof(TSD.ReinforcementBase));
+            List<DWallRebar> fullRebars = new List<DWallRebar>();
+            while (fullReinforcements.MoveNext())
+            {
+                if (fullReinforcements.Current is ReinforcementBase rebar)
+                {
+                    DWallRebar dWallRebar = new DWallRebar(model, rebar);
+                    fullRebars.Add(dWallRebar);
+                }
+            }
+
+            List<List<DWallRebar>> splitedByCageRebars = fullRebars
+            .GroupBy(r => r.cageName)
+            .Select(group => group.ToList())
+            .ToList();
+
+            List<TSG.Point> cagePointList = new List<TSG.Point>() { new TSG.Point(frontView.RestrictionBox.MinPoint.X, frontView.RestrictionBox.MinPoint.Y, 0) };
+            foreach (List<DWallRebar> rebarByCage in splitedByCageRebars)
+            {
+                double minXValue = double.MaxValue;
+                double maxXValue = double.MinValue;
+                foreach (DWallRebar dWallRebar in rebarByCage)
+                {
+                    dWallRebar.rebarModel.Select();
+                    Solid rebarSolid = dWallRebar.rebarModel.GetSolid();
+                    if (minXValue > rebarSolid.MinimumPoint.X)
+                    {
+                        minXValue = rebarSolid.MinimumPoint.X;
+                    }
+                    if (maxXValue < rebarSolid.MaximumPoint.X)
+                    {
+                        maxXValue = rebarSolid.MaximumPoint.X;
+                    }
+                }
+
+                TSG.Point leftPoint = new TSG.Point(minXValue, frontView.RestrictionBox.MinPoint.Y, 0);
+                TSG.Point rightPoint = new TSG.Point(maxXValue, frontView.RestrictionBox.MinPoint.Y, 0);
+                cagePointList.Add(leftPoint);
+                cagePointList.Add(rightPoint);
+                #region Create Cage Line
+                TSG.Point leftTop = new TSG.Point(minXValue, frontView.RestrictionBox.MaxPoint.Y, 0);
+                TSG.Point rightTop = new TSG.Point(maxXValue, frontView.RestrictionBox.MaxPoint.Y, 0);
+
+                TSD.Line leftLine = new TSD.Line(frontView, leftTop, leftPoint);
+                leftLine.Attributes.Line.Type = LineTypes.DashDot;
+                leftLine.Attributes.Line.Color = DrawingColors.Black;
+                leftLine.Insert();
+
+                TSD.Line rightLine = new TSD.Line(frontView, rightTop, rightPoint);
+                rightLine.Attributes.Line.Type = LineTypes.DashDot;
+                rightLine.Attributes.Line.Color = DrawingColors.Black;
+                rightLine.Insert();
+                #endregion
+
+                #region Create Cage Dim
+                string cageN = rebarByCage[0].cageName.Replace("CAGE ", "");
+
+                StraightDimensionSetAttributes StraightCageDimAttribute = new StraightDimensionSetAttributes("DWall-Dim" + cageN);
+                new StraightDimension(frontView, leftPoint, rightPoint, vY, -500, StraightCageDimAttribute).Insert();
+                #endregion
+            }
+            cagePointList.Add(new TSG.Point(frontView.RestrictionBox.MaxPoint.X, frontView.RestrictionBox.MinPoint.Y, 0));
+            #endregion
+
+            #region Horizontal Dim
+            for (int i = 0; i < cagePointList.Count - 1; i += 2)
+            {
+                new StraightDimension(frontView, cagePointList[i], cagePointList[i + 1], vY, -500, StraightDimAttribute).Insert();
+            }
+
+            StraightDimensionSetAttributes StraightTotalDimAttribute = new StraightDimensionSetAttributes("DWall-DimP");
+            new StraightDimension(frontView, cagePointList[0], cagePointList[cagePointList.Count - 1], vY, -1200, StraightDimAttribute).Insert();
+            #endregion
+
+            #region Get Neighbor
+            DrawingObjectEnumerator parts = frontView.GetAllObjects(typeof(TSD.Part));
+            string leftPartName = "";
+            string rightPartName = "";
+            List<TSM.Part> listSlabs = new List<TSM.Part>();
+            string panelName = listPanel[0].Name;
+            while (parts.MoveNext())
+            {
+                if (parts.Current is TSD.Part _part)
+                {
+                    DWallBeam dWallPart = new DWallBeam(model, _part);
+                    TSM.Part part = dWallPart.panelModel;
+                    if (part.Name != panelName && part.Name != "TREMIE" && part.Name != "SHEAR PIN" && part.Name != "PIPE" && part.Name != "INCLINOMETER" && part.Name != "SONIC" && part.Name != "JOIN")
+                    {
+                        if (part.Class == listPanel[0].Class)
+                        {
+                            Solid solid = part.GetSolid();
+                            if (Math.Round(solid.MinimumPoint.X) <= Math.Round(frontView.RestrictionBox.MinPoint.X))
+                            {
+                                leftPartName = part.Name;
+                            }
+                            else
+                            {
+                                rightPartName = part.Name;
+                            }
+                        }
+                        else
+                        {
+                            Solid solid = part.GetSolid();
+                            if (RangesOverlap(solid.MinimumPoint.X, solid.MaximumPoint.X, frontView.RestrictionBox.MinPoint.X, frontView.RestrictionBox.MaxPoint.X))
+                            {
+                                listSlabs.Add(part);
+                            }
+                        }
+                    }
+                }
+            }
+            #endregion
         }
     }
 }
