@@ -19,6 +19,8 @@ using System;
 using Tekla.Structures.Geometry3d;
 using static Tekla.Structures.Drawing.StraightDimensionSet;
 using System.Windows.Controls;
+using static Tekla.Structures.Drawing.Text;
+using static Tekla.Structures.Drawing.LevelMark;
 
 namespace IntraforDrawing
 {
@@ -292,6 +294,99 @@ namespace IntraforDrawing
         private bool RangesOverlap(double start1, double end1, double start2, double end2)
         {
             return Math.Round(start1) < Math.Round(end2) && Math.Round(start2) < Math.Round(end1);
+        }
+        private LevelMark CreateLevelMark(TSD.View view, TSG.Point point, TSG.Vector direction)
+        {
+            LevelMarkAttributes levelMarkAtt = new LevelMarkAttributes("DWall-Level");
+            TSG.Point directionPoint = point + direction * 300;
+            LevelMark topLevelMark = new LevelMark(view, directionPoint, point, levelMarkAtt);
+            topLevelMark.Insert();
+            view.Modify();
+            Macro.Load_LeverMark(topLevelMark, "DWall-Level");
+            return topLevelMark;
+        }
+        private LevelMark CreateValueLevelMark(TSD.View view, TSG.Point point, TSG.Vector direction, string text)
+        {
+            LevelMark leverMark = CreateLevelMark(view, point, direction);
+
+            TSG.Point textPoint = point + direction * 675;
+            if (text == "TENTATIVE TOE LEVEL")
+            {
+                textPoint = textPoint - vX * 100;
+                Text slabText = new Text(view, textPoint, text, new TextAttributes("CENTER-TEXT-TOE"));
+                slabText.Insert();
+            }
+            else
+            {
+                Text slabText = new Text(view, textPoint, text, new TextAttributes("CENTER-TEXT"));
+                slabText.Insert();
+            }
+            return leverMark;
+        }
+        private LevelMark CreateNoValueLevelMark(TSD.View view, TSG.Point point, TSG.Vector direction, string text)
+        {
+            LevelMarkAttributes levelMarkAtt = new LevelMarkAttributes("DWall-Slab");
+            TSG.Point directionPoint = point + direction * 425;
+            LevelMark topLevelMark = new LevelMark(view, directionPoint, point, levelMarkAtt);
+            topLevelMark.Insert();
+            view.Modify();
+            Macro.Load_LeverMark(topLevelMark, "DWall-Slab");
+
+            Text slabText = new Text(view, directionPoint, text, new TextAttributes("CENTER-TEXT"));
+            slabText.Insert();
+            return topLevelMark;
+        }
+        private List<LevelMark> CreateRebarLevelMark(TSD.View view, List<DWallRebar> listDWallRebars, double xValue)
+        {
+            List<LevelMark> listLevelMark = new List<LevelMark>();
+            List<TSG.Point> pointList = new List<TSG.Point>();
+            foreach (DWallRebar dWallRebar in listDWallRebars)
+            {
+                TSG.Point topPoint = new TSG.Point(xValue, dWallRebar.topRebarPoint.Y, 0);
+                TSG.Point botPoint = new TSG.Point(xValue, dWallRebar.botRebarPoint.Y, 0);
+
+                pointList.Add(topPoint);
+                pointList.Add(botPoint);
+            }
+
+            pointList = pointList.DistinctBy(x => x).OrderByDescending(x => x.Y).ToList();
+
+            for (int i = 0; i < pointList.Count; i++)
+            {
+                if (i != 0)
+                {
+                    if (Math.Abs(pointList[i].Y - pointList[i - 1].Y) < 400)
+                    {
+                        listLevelMark.Add(CreateLevelMark(view, pointList[i], new TSG.Vector(0, -1, 0)));
+                    }
+                    else
+                    {
+                        listLevelMark.Add(CreateLevelMark(view, pointList[i], vY));
+                    }
+                }
+                else
+                {
+                    listLevelMark.Add(CreateLevelMark(view, pointList[i], vY));
+                }
+            }
+
+            TSG.Point TopPoint = pointList[0];
+            foreach (TSG.Point point in pointList)
+            {
+                if (point.Y > TopPoint.Y)
+                {
+                    TopPoint = point;
+                }
+            }
+
+            #region Steel Cut-Off
+            TSG.Point steelPoint = new TSG.Point(TopPoint.X, TopPoint.Y + 675, 0);
+
+            Text textSteel = new Text(view, steelPoint, "STEEL CUT-OFF", new TextAttributes("CENTER-TEXT"));
+            textSteel.Insert();
+            #endregion
+
+            return listLevelMark;
         }
         private List<Assembly> GetAssemblyList()
         {
@@ -742,6 +837,7 @@ namespace IntraforDrawing
                 frontView.Origin = frontView.Origin - vY * moveDown;
                 frontView.Modify();
                 #endregion
+
                 EditFrontView(frontView, listPanel, cageName, listSplit, isContainTop, isContainBot);
                 topView.Delete();
                 dh.CloseActiveDrawing(true);
@@ -755,6 +851,9 @@ namespace IntraforDrawing
 
             StraightDimensionSetHandler sdsh = new StraightDimensionSetHandler();
             StraightDimensionSetAttributes StraightDimAttribute = new StraightDimensionSetAttributes("DWall-Dim");
+
+            double levelLeftXValue = frontView.RestrictionBox.MinPoint.X - 750;
+            double levelRightXValue = frontView.RestrictionBox.MaxPoint.X + 550;
 
             #region Get Panel
             List<string> cageNos = listSplit.ToCharArray()
@@ -853,7 +952,7 @@ namespace IntraforDrawing
             }
 
             StraightDimensionSetAttributes StraightTotalDimAttribute = new StraightDimensionSetAttributes("DWall-DimP");
-            new StraightDimension(frontView, cagePointList[0], cagePointList[cagePointList.Count - 1], vY, -1200, StraightDimAttribute).Insert();
+            new StraightDimension(frontView, cagePointList[0], cagePointList[cagePointList.Count - 1], vY, -1200, StraightTotalDimAttribute).Insert();
             #endregion
 
             #region Get Neighbor
@@ -893,6 +992,614 @@ namespace IntraforDrawing
                     }
                 }
             }
+            #endregion
+
+            #region Create Neighbor Panel Connect
+            #region Left
+            if (leftPartName != "")
+            {
+                #region Arrow Line
+                TSG.Point firstPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X - 550, frontView.RestrictionBox.MinPoint.Y - 1450, 0);
+                TSG.Point secondPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X - 2150, frontView.RestrictionBox.MinPoint.Y - 1450, 0);
+                TSD.Line line = new TSD.Line(frontView, firstPoint, secondPoint, new TSD.Line.LineAttributes("Panel-Arrow"));
+                line.Insert();
+                #endregion
+
+                #region Panel Text
+                TSG.Point insertPoint = firstPoint - vX * 500 + vY * 15;
+                Text text = new Text(frontView, insertPoint, "PANEL " + leftPartName, new TextAttributes("PANEL-CENTER-TEXT"));
+                text.Insert();
+                #endregion
+            }
+            #endregion
+
+            #region Right
+            if (rightPartName != "")
+            {
+                #region Arrow Line
+                TSG.Point firstPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X + 550, frontView.RestrictionBox.MinPoint.Y - 1450, 0);
+                TSG.Point secondPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X + 2150, frontView.RestrictionBox.MinPoint.Y - 1450, 0);
+                TSD.Line line = new TSD.Line(frontView, firstPoint, secondPoint, new TSD.Line.LineAttributes("Panel-Arrow"));
+                line.Insert();
+                #endregion
+
+                #region Panel Text
+                TSG.Point insertPoint = firstPoint + vX * 500 + vY * 15;
+                Text text = new Text(frontView, insertPoint, "PANEL " + rightPartName, new TextAttributes("PANEL-CENTER-TEXT"));
+                text.Insert();
+                #endregion
+            }
+            #endregion
+
+            #region Middle Slab Rectangle
+            if (listSlabs.Count() != 0)
+            {
+                foreach (TSM.Part slab in listSlabs)
+                {
+                    Solid solid = slab.GetSolid();
+                    double YMax = solid.MaximumPoint.Y;
+                    double YMin = solid.MinimumPoint.Y;
+
+                    Rectangle rec = new Rectangle(frontView, new TSG.Point(frontView.RestrictionBox.MinPoint.X, YMin, 0), new TSG.Point(frontView.RestrictionBox.MaxPoint.X, YMax, 0), new Rectangle.RectangleAttributes("DWall-SectionRectangle"));
+                    rec.Insert();
+                }
+            }
+            #endregion
+            #endregion
+
+            #region View Name
+            TSG.Point namePoint = new TSG.Point((frontView.RestrictionBox.MinPoint.X + frontView.RestrictionBox.MaxPoint.X) / 2, frontView.RestrictionBox.MinPoint.Y - 2000, 0);
+            new Text(frontView, namePoint, "FRONT ELEVATION (" + cageName + ")", new TextAttributes("CENTER-UNDERLINE-TEXT")).Insert();
+            TSG.Point note1Point = namePoint - vY * 400;
+            new Text(frontView, note1Point, "SHEAR & HORI. REINFORCEMENT NOT SHOWN FOR CLARITY", new TextAttributes("CENTER-NOTE1-TEXT")).Insert();
+            TSG.Point note2Point = note1Point - vY * 300;
+            new Text(frontView, note2Point, "(VIEWED FROM NEAR FACE)", new TextAttributes("CENTER-NOTE2-TEXT")).Insert();
+            TSG.Point scalePoint = note2Point - vY * 300;
+            new Text(frontView, scalePoint, "SCALE 1:100", new TextAttributes("CENTER-NOTE1-TEXT")).Insert();
+            #endregion
+
+            #region Load After Attribute
+            Macro.Load_ViewAttribute_Filter_And_EditSetting(frontView, cageName + " Front");
+            frontView.Modify();
+            #endregion
+
+            #region Get Reinforcement
+            DrawingObjectEnumerator reinforcements = frontView.GetAllObjects(typeof(TSD.ReinforcementBase));
+            List<DWallRebar> farFaceRebars = new List<DWallRebar>();
+            List<DWallRebar> nearFaceRebars = new List<DWallRebar>();
+            List<DWallRebar> cage1stRebars = new List<DWallRebar>();
+            List<DWallRebar> cage2ndRebars = new List<DWallRebar>();
+            List<DWallRebar> cage3rdRebars = new List<DWallRebar>();
+            List<DWallRebar> cage4thRebars = new List<DWallRebar>();
+            List<DWallRebar> allNFFFRebars = new List<DWallRebar>();
+            while (reinforcements.MoveNext())
+            {
+                if (reinforcements.Current is TSD.ReinforcementBase rebar)
+                {
+                    DWallRebar dWallRebar = new DWallRebar(model, rebar);
+                    if (dWallRebar.cageName == cageName)
+                    {
+                        if (dWallRebar.rebarName == "Main Bar FF")
+                        {
+                            dWallRebar.rebarModel.Select();
+                            Solid solid = dWallRebar.rebarModel.GetSolid();
+                            dWallRebar.topRebarPoint = new TSG.Point(solid.MaximumPoint.X, solid.MaximumPoint.Y, solid.MaximumPoint.Z);
+                            dWallRebar.botRebarPoint = new TSG.Point(solid.MinimumPoint.X, solid.MinimumPoint.Y, solid.MinimumPoint.Z);
+                            farFaceRebars.Add(dWallRebar);
+                            allNFFFRebars.Add(dWallRebar);
+                        }
+                        else if (dWallRebar.rebarName == "Main Bar NF")
+                        {
+                            dWallRebar.rebarModel.Select();
+                            Solid solid = dWallRebar.rebarModel.GetSolid();
+                            dWallRebar.topRebarPoint = new TSG.Point(solid.MaximumPoint.X, solid.MaximumPoint.Y, solid.MaximumPoint.Z);
+                            dWallRebar.botRebarPoint = new TSG.Point(solid.MinimumPoint.X, solid.MinimumPoint.Y, solid.MinimumPoint.Z);
+                            nearFaceRebars.Add(dWallRebar);
+                            allNFFFRebars.Add(dWallRebar);
+                        }
+
+                        if (dWallRebar.cageNo == "1st CAGE")
+                        {
+                            dWallRebar.rebarModel.Select();
+                            Solid solid = dWallRebar.rebarModel.GetSolid();
+                            dWallRebar.topRebarPoint = new TSG.Point(solid.MaximumPoint.X, solid.MaximumPoint.Y, 0);
+                            dWallRebar.botRebarPoint = new TSG.Point(solid.MinimumPoint.X, solid.MinimumPoint.Y, 0);
+                            cage1stRebars.Add(dWallRebar);
+                        }
+                        else if (dWallRebar.cageNo == "2nd CAGE")
+                        {
+                            dWallRebar.rebarModel.Select();
+                            Solid solid = dWallRebar.rebarModel.GetSolid();
+                            dWallRebar.topRebarPoint = new TSG.Point(solid.MaximumPoint.X, solid.MaximumPoint.Y, 0);
+                            dWallRebar.botRebarPoint = new TSG.Point(solid.MinimumPoint.X, solid.MinimumPoint.Y, 0);
+                            cage2ndRebars.Add(dWallRebar);
+                        }
+                        else if (dWallRebar.cageNo == "3rd CAGE")
+                        {
+                            dWallRebar.rebarModel.Select();
+                            Solid solid = dWallRebar.rebarModel.GetSolid();
+                            dWallRebar.topRebarPoint = new TSG.Point(solid.MaximumPoint.X, solid.MaximumPoint.Y, 0);
+                            dWallRebar.botRebarPoint = new TSG.Point(solid.MinimumPoint.X, solid.MinimumPoint.Y, 0);
+                            cage3rdRebars.Add(dWallRebar);
+                        }
+                        else if (dWallRebar.cageNo == "4th CAGE")
+                        {
+                            dWallRebar.rebarModel.Select();
+                            Solid solid = dWallRebar.rebarModel.GetSolid();
+                            dWallRebar.topRebarPoint = new TSG.Point(solid.MaximumPoint.X, solid.MaximumPoint.Y, 0);
+                            dWallRebar.botRebarPoint = new TSG.Point(solid.MinimumPoint.X, solid.MinimumPoint.Y, 0);
+                            cage4thRebars.Add(dWallRebar);
+                        }
+                    }
+                }
+            }
+            if (farFaceRebars.Count != 0)
+            {
+                farFaceRebars = farFaceRebars.OrderByDescending(x => x.topRebarPoint.Y).ThenBy(x => x.botRebarPoint.Y).ToList();
+            }
+            if (nearFaceRebars.Count != 0)
+            {
+                nearFaceRebars = nearFaceRebars.OrderByDescending(x => x.topRebarPoint.Y).ThenBy(x => x.botRebarPoint.Y).ToList();
+            }
+            #endregion
+
+            #region Part Lever Mark
+            #region Bottom Lever
+            if (isContainBot)
+            {
+                CreateValueLevelMark(frontView, new TSG.Point(levelLeftXValue, frontView.RestrictionBox.MinPoint.Y, 0), new TSG.Vector(0, -1, 0), "TENTATIVE TOE LEVEL");
+            }
+            #endregion
+
+            #region Create Slab Lever
+            List<LevelMark> listLevelSlabs = new List<LevelMark>();
+            if (listSlabs.Count != 0)
+            {
+                foreach (TSM.Part slab in listSlabs)
+                {
+                    double Yvalue = slab.GetSolid().MaximumPoint.Y;
+                    listLevelSlabs.Add(CreateNoValueLevelMark(frontView, new TSG.Point((frontView.RestrictionBox.MinPoint.X + frontView.RestrictionBox.MaxPoint.X) / 2, Yvalue, 0), vY, slab.Name + " SLAB"));
+                }
+            }
+            #endregion
+
+            #region Create Top Lever
+            if (isContainTop)
+            {
+                double maxYValue = double.MinValue;
+                foreach (DWallBeam dWallBeam in listShowPanel)
+                {
+                    Solid solid = dWallBeam.panelModel.GetSolid();
+                    if (solid.MaximumPoint.Y > maxYValue)
+                    {
+                        maxYValue = solid.MaximumPoint.Y;
+                    }
+                }
+                LevelMark levelTopConcrete = CreateValueLevelMark(frontView, new TSG.Point((frontView.RestrictionBox.MinPoint.X + frontView.RestrictionBox.MaxPoint.X) / 2, maxYValue, 0), vY, "CONCRETE CUT-OFF");
+            }
+            #endregion
+            #endregion
+
+            #region Reinforcement Level Mark
+            List<LevelMark> farFaceLevelMark = CreateRebarLevelMark(frontView, farFaceRebars, levelLeftXValue);
+            List<LevelMark> nearFaceLevelMark = CreateRebarLevelMark(frontView, nearFaceRebars, levelRightXValue);
+            #endregion
+
+            #region Positioning Reinforcement
+            #region Far Face
+            if (farFaceRebars.Count != 0)
+            {
+                #region Insert Rebar Position by Layer
+                List<DWallRebar> rebarLayer1st = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer2nd = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer3rd = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer4th = new List<DWallRebar>();
+                foreach (DWallRebar dWallRebar in farFaceRebars)
+                {
+                    if (dWallRebar.rebarLayer == "1st LAYER" || dWallRebar.rebarLayer == "")
+                    {
+                        rebarLayer1st.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "2nd LAYER")
+                    {
+                        rebarLayer2nd.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "3rd LAYER")
+                    {
+                        rebarLayer3rd.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "4th LAYER")
+                    {
+                        rebarLayer4th.Add(dWallRebar);
+                    }
+                }
+
+                if (rebarLayer1st.Count != 0)
+                {
+                    rebarLayer1st = rebarLayer1st.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer1st.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            rebarLayer1st[i].rebarPosition = 1;
+                        }
+                        else
+                        {
+                            rebarLayer1st[i].rebarPosition = 2;
+                        }
+                    }
+                }
+
+                if (rebarLayer2nd.Count != 0)
+                {
+                    rebarLayer2nd = rebarLayer2nd.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer2nd.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            rebarLayer2nd[i].rebarPosition = 3;
+                        }
+                        else
+                        {
+                            rebarLayer2nd[i].rebarPosition = 4;
+                        }
+                    }
+                }
+
+                if (rebarLayer3rd.Count != 0)
+                {
+                    rebarLayer3rd = rebarLayer3rd.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer3rd.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            rebarLayer3rd[i].rebarPosition = 5;
+                        }
+                        else
+                        {
+                            rebarLayer3rd[i].rebarPosition = 6;
+                        }
+                    }
+                }
+
+                if (rebarLayer4th.Count != 0)
+                {
+                    rebarLayer4th = rebarLayer4th.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer4th.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            rebarLayer4th[i].rebarPosition = 7;
+                        }
+                        else
+                        {
+                            rebarLayer4th[i].rebarPosition = 8;
+                        }
+                    }
+                }
+                #endregion
+
+                #region Positioning
+                foreach (DWallRebar dWallRebar in farFaceRebars)
+                {
+                    ReinforcementGroup rebar = dWallRebar.rebarDrawing as ReinforcementGroup;
+                    RebarGroup rebarModel = dWallRebar.rebarModel;
+                    rebarModel.Select();
+                    if (dWallRebar.rebarPosition == 1)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = 0.1;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.9;
+                        }
+                        rebar.Modify();
+                    }
+                    else if (dWallRebar.rebarPosition == 2)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = 0.14;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.86;
+                        }
+                        rebar.Modify();
+                    }
+                    else if (dWallRebar.rebarPosition == 3)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = 0.18;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.82;
+                        }
+                        rebar.Modify();
+                    }
+                    else if (dWallRebar.rebarPosition == 4)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = 0.22;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.78;
+                        }
+                        ;
+                        rebar.Modify();
+                    }
+                    else if (dWallRebar.rebarPosition == 5)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = 0.26;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.74;
+                        }
+                        rebar.Modify();
+                    }
+                    else if (dWallRebar.rebarPosition == 6)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = 0.3;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.7;
+                        }
+                        rebar.Modify();
+                    }
+                    else if (dWallRebar.rebarPosition == 7)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = 0.34;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.66;
+                        }
+                        rebar.Modify();
+                    }
+                    else if (dWallRebar.rebarPosition == 8)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = 0.38;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.62;
+                        }
+                        rebar.Modify();
+                    }
+                }
+                #endregion
+            }
+            #endregion
+
+            #region Near Face
+            if (nearFaceRebars.Count != 0)
+            {
+                #region Insert Rebar Position by Layer
+                List<DWallRebar> rebarLayer1st = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer2nd = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer3rd = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer4th = new List<DWallRebar>();
+                foreach (DWallRebar dWallRebar in nearFaceRebars)
+                {
+                    if (dWallRebar.rebarLayer == "1st LAYER" || dWallRebar.rebarLayer == "")
+                    {
+                        rebarLayer1st.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "2nd LAYER")
+                    {
+                        rebarLayer2nd.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "3rd LAYER")
+                    {
+                        rebarLayer3rd.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "4th LAYER")
+                    {
+                        rebarLayer4th.Add(dWallRebar);
+                    }
+                }
+
+                if (rebarLayer1st.Count != 0)
+                {
+                    rebarLayer1st = rebarLayer1st.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer1st.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            rebarLayer1st[i].rebarPosition = 1;
+                        }
+                        else
+                        {
+                            rebarLayer1st[i].rebarPosition = 2;
+                        }
+                    }
+                }
+
+                if (rebarLayer2nd.Count != 0)
+                {
+                    rebarLayer2nd = rebarLayer2nd.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer2nd.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            rebarLayer2nd[i].rebarPosition = 3;
+                        }
+                        else
+                        {
+                            rebarLayer2nd[i].rebarPosition = 4;
+                        }
+                    }
+                }
+
+                if (rebarLayer3rd.Count != 0)
+                {
+                    rebarLayer3rd = rebarLayer3rd.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer3rd.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            rebarLayer3rd[i].rebarPosition = 5;
+                        }
+                        else
+                        {
+                            rebarLayer3rd[i].rebarPosition = 6;
+                        }
+                    }
+                }
+
+                if (rebarLayer4th.Count != 0)
+                {
+                    rebarLayer4th = rebarLayer4th.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer4th.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            rebarLayer4th[i].rebarPosition = 7;
+                        }
+                        else
+                        {
+                            rebarLayer4th[i].rebarPosition = 8;
+                        }
+                    }
+                }
+                #endregion
+
+                #region Positioning
+                double startValue = 0.62;
+                if (rebarLayer4th.Count == 0)
+                {
+                    startValue = 0.7;
+                }
+                if (rebarLayer4th.Count == 0 && rebarLayer3rd.Count == 0)
+                {
+                    startValue = 0.78;
+                }
+                if (rebarLayer4th.Count == 0 && rebarLayer3rd.Count == 0 && rebarLayer2nd.Count == 0)
+                {
+                    startValue = 0.86;
+                }
+
+                foreach (DWallRebar dWallRebar in nearFaceRebars)
+                {
+                    ReinforcementGroup rebar = dWallRebar.rebarDrawing as ReinforcementGroup;
+                    RebarGroup rebarModel = dWallRebar.rebarModel;
+                    rebarModel.Select();
+                    if (dWallRebar.rebarPosition == 1)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = startValue;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 1 - startValue;
+                        }
+                        rebar.Modify();
+                    }
+                    else if (dWallRebar.rebarPosition == 2)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = startValue + 0.04;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.96 - startValue;
+                        }
+                        rebar.Modify();
+                    }
+                    else if (dWallRebar.rebarPosition == 3)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = startValue + 0.08;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.92 - startValue;
+                        }
+                        rebar.Modify();
+                    }
+                    else if (dWallRebar.rebarPosition == 4)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = startValue + 0.12;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.88 - startValue;
+                        }
+                        rebar.Modify();
+                    }
+                    else if (dWallRebar.rebarPosition == 5)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = startValue + 0.16;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.84 - startValue;
+                        }
+                        rebar.Modify();
+                    }
+                    else if (dWallRebar.rebarPosition == 6)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = startValue + 0.2;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.8 - startValue;
+                        }
+                        rebar.Modify();
+                    }
+                    else if (dWallRebar.rebarPosition == 7)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = startValue + 0.24;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.76 - startValue;
+                        }
+                        rebar.Modify();
+                    }
+                    else if (dWallRebar.rebarPosition == 8)
+                    {
+                        if (rebarModel.StartPoint.X < rebarModel.EndPoint.X)
+                        {
+                            rebar.ReinforcementCustomPosition = startValue + 0.28;
+                        }
+                        else
+                        {
+                            rebar.ReinforcementCustomPosition = 0.72 - startValue;
+                        }
+                        rebar.Modify();
+                    }
+                }
+                #endregion
+            }
+            #endregion
             #endregion
         }
     }
