@@ -266,6 +266,26 @@ namespace IntraforDrawing
                 }
             );
         }
+        public class PointListComparer : IEqualityComparer<List<TSG.Point>>
+        {
+            public bool Equals(List<TSG.Point> a, List<TSG.Point> b)
+            {
+                if (ReferenceEquals(a, b)) return true;
+                if (a == null || b == null || a.Count != b.Count) return false;
+                return a.Zip(b, (p1, p2) => p1.Equals(p2)).All(equal => equal);
+            }
+
+            public int GetHashCode(List<TSG.Point> points)
+            {
+                if (points == null) return 0;
+                int hash = 19;
+                foreach (var point in points)
+                {
+                    hash = hash * 31 + point.GetHashCode();
+                }
+                return hash;
+            }
+        }
         string IncrementLastSegment(string input)
         {
             var parts = input.Split('/');
@@ -336,7 +356,7 @@ namespace IntraforDrawing
             slabText.Insert();
             return topLevelMark;
         }
-        private List<LevelMark> CreateRebarLevelMark(TSD.View view, List<DWallRebar> listDWallRebars, double xValue)
+        private List<LevelMark> CreateRebarLevelMark(TSD.View view, List<DWallRebar> listDWallRebars, double xValue, bool isContainTop, bool isContainBot)
         {
             List<LevelMark> listLevelMark = new List<LevelMark>();
             List<TSG.Point> pointList = new List<TSG.Point>();
@@ -351,18 +371,31 @@ namespace IntraforDrawing
 
             pointList = pointList.DistinctBy(x => x).OrderByDescending(x => x.Y).ToList();
 
-            for (int i = 0; i < pointList.Count; i++)
+            if (isContainTop)
             {
-                if (i != 0)
+                listLevelMark.Add(CreateLevelMark(view, pointList[0], vY));
+
+                #region Steel Cut-Off
+                TSG.Point TopPoint = pointList[0];
+                foreach (TSG.Point point in pointList)
                 {
-                    if (Math.Abs(pointList[i].Y - pointList[i - 1].Y) < 400)
+                    if (point.Y > TopPoint.Y)
                     {
-                        listLevelMark.Add(CreateLevelMark(view, pointList[i], new TSG.Vector(0, -1, 0)));
+                        TopPoint = point;
                     }
-                    else
-                    {
-                        listLevelMark.Add(CreateLevelMark(view, pointList[i], vY));
-                    }
+                }
+                TSG.Point steelPoint = new TSG.Point(TopPoint.X, TopPoint.Y + 675, 0);
+
+                Text textSteel = new Text(view, steelPoint, "STEEL CUT-OFF", new TextAttributes("CENTER-TEXT"));
+                textSteel.Insert();
+                #endregion
+            }
+
+            for (int i = 1; i < pointList.Count - 1; i++)
+            {
+                if (Math.Abs(pointList[i].Y - pointList[i - 1].Y) < 400)
+                {
+                    listLevelMark.Add(CreateLevelMark(view, pointList[i], new TSG.Vector(0, -1, 0)));
                 }
                 else
                 {
@@ -370,21 +403,17 @@ namespace IntraforDrawing
                 }
             }
 
-            TSG.Point TopPoint = pointList[0];
-            foreach (TSG.Point point in pointList)
+            if (isContainBot)
             {
-                if (point.Y > TopPoint.Y)
+                if (Math.Abs(pointList[pointList.Count].Y - pointList[pointList.Count - 1].Y) < 400)
                 {
-                    TopPoint = point;
+                    listLevelMark.Add(CreateLevelMark(view, pointList[pointList.Count], new TSG.Vector(0, -1, 0)));
+                }
+                else
+                {
+                    listLevelMark.Add(CreateLevelMark(view, pointList[pointList.Count], vY));
                 }
             }
-
-            #region Steel Cut-Off
-            TSG.Point steelPoint = new TSG.Point(TopPoint.X, TopPoint.Y + 675, 0);
-
-            Text textSteel = new Text(view, steelPoint, "STEEL CUT-OFF", new TextAttributes("CENTER-TEXT"));
-            textSteel.Insert();
-            #endregion
 
             return listLevelMark;
         }
@@ -1181,8 +1210,8 @@ namespace IntraforDrawing
             #endregion
 
             #region Reinforcement Level Mark
-            List<LevelMark> farFaceLevelMark = CreateRebarLevelMark(frontView, farFaceRebars, levelLeftXValue);
-            List<LevelMark> nearFaceLevelMark = CreateRebarLevelMark(frontView, nearFaceRebars, levelRightXValue);
+            List<LevelMark> farFaceLevelMark = CreateRebarLevelMark(frontView, farFaceRebars, levelLeftXValue, isContainTop, isContainBot);
+            List<LevelMark> nearFaceLevelMark = CreateRebarLevelMark(frontView, nearFaceRebars, levelRightXValue, isContainTop, isContainBot);
             #endregion
 
             #region Positioning Reinforcement
@@ -1600,6 +1629,811 @@ namespace IntraforDrawing
                 #endregion
             }
             #endregion
+            #endregion
+
+            #region Vertical Dim
+            double leftDimValue = -1700;
+            double rightDimValue = 3300;
+            #region Dim lap
+            #region Far Face
+            if (farFaceRebars.Count != 0)
+            {
+                #region Insert Rebar by Layer
+                List<DWallRebar> rebarLayer1st = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer2nd = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer3rd = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer4th = new List<DWallRebar>();
+                foreach (DWallRebar dWallRebar in farFaceRebars)
+                {
+                    if (dWallRebar.rebarLayer == "1st LAYER" || dWallRebar.rebarLayer == "")
+                    {
+                        rebarLayer1st.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "2nd LAYER")
+                    {
+                        rebarLayer2nd.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "3rd LAYER")
+                    {
+                        rebarLayer3rd.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "4th LAYER")
+                    {
+                        rebarLayer4th.Add(dWallRebar);
+                    }
+                }
+                #endregion
+
+                #region Dim lap
+                List<List<TSG.Point>> listLapPoint = new List<List<TSG.Point>>();
+                if (rebarLayer1st.Count != 0)
+                {
+                    rebarLayer1st = rebarLayer1st.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer1st.Count - 1; i++)
+                    {
+                        TSG.Point firstBotPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer1st[i].botRebarPoint.Y, 0);
+                        TSG.Point secondTopPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer1st[i + 1].topRebarPoint.Y, 0);
+
+                        if (secondTopPoint.Y > firstBotPoint.Y)
+                        {
+                            List<TSG.Point> lapPoint = new List<TSG.Point>
+                            {
+                                secondTopPoint,
+                                firstBotPoint
+                            };
+                            listLapPoint.Add(lapPoint);
+                        }
+                    }
+                }
+
+                if (rebarLayer2nd.Count != 0)
+                {
+                    rebarLayer2nd = rebarLayer2nd.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer2nd.Count - 1; i++)
+                    {
+                        TSG.Point firstBotPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer2nd[i].botRebarPoint.Y, 0);
+                        TSG.Point secondTopPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer2nd[i + 1].topRebarPoint.Y, 0);
+
+                        if (secondTopPoint.Y > firstBotPoint.Y)
+                        {
+                            List<TSG.Point> lapPoint = new List<TSG.Point>
+                            {
+                                secondTopPoint,
+                                firstBotPoint
+                            };
+                            listLapPoint.Add(lapPoint);
+                        }
+                    }
+                }
+
+                if (rebarLayer3rd.Count != 0)
+                {
+                    rebarLayer3rd = rebarLayer3rd.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer3rd.Count - 1; i++)
+                    {
+                        TSG.Point firstBotPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer3rd[i].botRebarPoint.Y, 0);
+                        TSG.Point secondTopPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer3rd[i + 1].topRebarPoint.Y, 0);
+
+                        if (secondTopPoint.Y > firstBotPoint.Y)
+                        {
+                            List<TSG.Point> lapPoint = new List<TSG.Point>
+                            {
+                                secondTopPoint,
+                                firstBotPoint
+                            };
+                            listLapPoint.Add(lapPoint);
+                        }
+                    }
+                }
+
+                if (rebarLayer4th.Count != 0)
+                {
+                    rebarLayer4th = rebarLayer4th.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer4th.Count - 1; i++)
+                    {
+                        TSG.Point firstBotPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer4th[i].botRebarPoint.Y, 0);
+                        TSG.Point secondTopPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer4th[i + 1].topRebarPoint.Y, 0);
+
+                        if (secondTopPoint.Y > firstBotPoint.Y)
+                        {
+                            List<TSG.Point> lapPoint = new List<TSG.Point>
+                            {
+                                secondTopPoint,
+                                firstBotPoint
+                            };
+                            listLapPoint.Add(lapPoint);
+                        }
+                    }
+                }
+
+                listLapPoint = listLapPoint.Distinct(new PointListComparer()).OrderByDescending(n => n[0].Y).ThenBy(n => n[1].Y).ToList();
+
+                for (int i = 0; i < listLapPoint.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, listLapPoint[i][0].Y, 0);
+                        TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, listLapPoint[i][1].Y, 0);
+                        PointList pointList = new PointList()
+                        {
+                            topPoint,
+                            botPoint
+                        };
+                        sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue, StraightDimAttribute);
+                    }
+                    else
+                    {
+                        if (listLapPoint[i][0].Y <= listLapPoint[i - 1][1].Y)
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, listLapPoint[i][0].Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, listLapPoint[i][1].Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue, StraightDimAttribute);
+                        }
+                        else
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, listLapPoint[i][0].Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, listLapPoint[i][1].Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue + 350, StraightDimAttribute);
+                        }
+                    }
+                }
+                #endregion
+            }
+            #endregion
+
+            #region Near Face
+            if (nearFaceRebars.Count != 0)
+            {
+                #region Insert Rebar by Layer
+                List<DWallRebar> rebarLayer1st = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer2nd = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer3rd = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer4th = new List<DWallRebar>();
+                foreach (DWallRebar dWallRebar in nearFaceRebars)
+                {
+                    if (dWallRebar.rebarLayer == "1st LAYER" || dWallRebar.rebarLayer == "")
+                    {
+                        rebarLayer1st.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "2nd LAYER")
+                    {
+                        rebarLayer2nd.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "3rd LAYER")
+                    {
+                        rebarLayer3rd.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "4th LAYER")
+                    {
+                        rebarLayer4th.Add(dWallRebar);
+                    }
+                }
+                #endregion
+
+                #region Dim lap
+                List<List<TSG.Point>> listLapPoint = new List<List<TSG.Point>>();
+                if (rebarLayer1st.Count != 0)
+                {
+                    rebarLayer1st = rebarLayer1st.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer1st.Count - 1; i++)
+                    {
+                        TSG.Point firstBotPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer1st[i].botRebarPoint.Y, 0);
+                        TSG.Point secondTopPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer1st[i + 1].topRebarPoint.Y, 0);
+
+                        if (secondTopPoint.Y > firstBotPoint.Y)
+                        {
+                            List<TSG.Point> lapPoint = new List<TSG.Point>
+                            {
+                                secondTopPoint,
+                                firstBotPoint
+                            };
+                            listLapPoint.Add(lapPoint);
+                        }
+                    }
+                }
+
+                if (rebarLayer2nd.Count != 0)
+                {
+                    rebarLayer2nd = rebarLayer2nd.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer2nd.Count - 1; i++)
+                    {
+                        TSG.Point firstBotPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer2nd[i].botRebarPoint.Y, 0);
+                        TSG.Point secondTopPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer2nd[i + 1].topRebarPoint.Y, 0);
+
+                        if (secondTopPoint.Y > firstBotPoint.Y)
+                        {
+                            List<TSG.Point> lapPoint = new List<TSG.Point>
+                            {
+                                secondTopPoint,
+                                firstBotPoint
+                            };
+                            listLapPoint.Add(lapPoint);
+                        }
+                    }
+                }
+
+                if (rebarLayer3rd.Count != 0)
+                {
+                    rebarLayer3rd = rebarLayer3rd.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer3rd.Count - 1; i++)
+                    {
+                        TSG.Point firstBotPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer3rd[i].botRebarPoint.Y, 0);
+                        TSG.Point secondTopPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer3rd[i + 1].topRebarPoint.Y, 0);
+
+                        if (secondTopPoint.Y > firstBotPoint.Y)
+                        {
+                            List<TSG.Point> lapPoint = new List<TSG.Point>
+                            {
+                                secondTopPoint,
+                                firstBotPoint
+                            };
+                            listLapPoint.Add(lapPoint);
+                        }
+                    }
+                }
+
+                if (rebarLayer4th.Count != 0)
+                {
+                    rebarLayer4th = rebarLayer4th.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer4th.Count - 1; i++)
+                    {
+                        TSG.Point firstBotPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer4th[i].botRebarPoint.Y, 0);
+                        TSG.Point secondTopPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer4th[i + 1].topRebarPoint.Y, 0);
+
+                        if (secondTopPoint.Y > firstBotPoint.Y)
+                        {
+                            List<TSG.Point> lapPoint = new List<TSG.Point>
+                            {
+                                secondTopPoint,
+                                firstBotPoint
+                            };
+                            listLapPoint.Add(lapPoint);
+                        }
+                    }
+                }
+
+                listLapPoint = listLapPoint.Distinct(new PointListComparer()).OrderByDescending(n => n[0].Y).ThenBy(n => n[1].Y).ToList();
+
+                for (int i = 0; i < listLapPoint.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, listLapPoint[i][0].Y, 0);
+                        TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, listLapPoint[i][1].Y, 0);
+                        PointList pointList = new PointList()
+                        {
+                            topPoint,
+                            botPoint
+                        };
+                        sdsh.CreateDimensionSet(frontView, pointList, vX, rightDimValue, StraightDimAttribute);
+                    }
+                    else
+                    {
+                        if (listLapPoint[i][0].Y <= listLapPoint[i - 1][1].Y)
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, listLapPoint[i][0].Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, listLapPoint[i][1].Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, rightDimValue, StraightDimAttribute);
+                        }
+                        else
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, listLapPoint[i][0].Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, listLapPoint[i][1].Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, rightDimValue - 350, StraightDimAttribute);
+                        }
+                    }
+                }
+                #endregion
+            }
+            #endregion
+            #endregion
+
+            #region Dim by Rebar Layer
+            StraightDimensionSetAttributes StraightDim1stLayerAttribute = new StraightDimensionSetAttributes("DWall-Dim-1stLayer");
+            StraightDimensionSetAttributes StraightDim2ndLayerAttribute = new StraightDimensionSetAttributes("DWall-Dim-2ndLayer");
+            StraightDimensionSetAttributes StraightDim3rdLayerAttribute = new StraightDimensionSetAttributes("DWall-Dim-3rdLayer");
+            StraightDimensionSetAttributes StraightDim4thLayerAttribute = new StraightDimensionSetAttributes("DWall-Dim-4thLayer");
+            #region Far Face
+            if (farFaceRebars.Count != 0)
+            {
+                #region Insert Rebar by Layer
+                List<DWallRebar> rebarLayer1st = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer2nd = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer3rd = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer4th = new List<DWallRebar>();
+                foreach (DWallRebar dWallRebar in farFaceRebars)
+                {
+                    if (dWallRebar.rebarLayer == "1st LAYER" || dWallRebar.rebarLayer == "")
+                    {
+                        rebarLayer1st.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "2nd LAYER")
+                    {
+                        rebarLayer2nd.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "3rd LAYER")
+                    {
+                        rebarLayer3rd.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "4th LAYER")
+                    {
+                        rebarLayer4th.Add(dWallRebar);
+                    }
+                }
+                #endregion
+
+                #region Dim by Layer
+                if (rebarLayer4th.Count != 0)
+                {
+                    if (rebarLayer4th.Count != 1)
+                    {
+                        leftDimValue -= 350;
+                    }
+                    rebarLayer4th = rebarLayer4th.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer4th.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer4th[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer4th[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue - 350, StraightDim4thLayerAttribute);
+                        }
+                        else
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer4th[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer4th[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue, StraightDim4thLayerAttribute);
+                        }
+                    }
+                    leftDimValue -= 350;
+                }
+
+                if (rebarLayer3rd.Count != 0)
+                {
+                    if (rebarLayer3rd.Count != 1)
+                    {
+                        leftDimValue -= 350;
+                    }
+                    rebarLayer3rd = rebarLayer3rd.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer3rd.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer3rd[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer3rd[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue - 350, StraightDim3rdLayerAttribute);
+                        }
+                        else
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer3rd[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer3rd[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue, StraightDim3rdLayerAttribute);
+                        }
+                    }
+                    leftDimValue -= 350;
+                }
+
+                if (rebarLayer2nd.Count != 0)
+                {
+                    if (rebarLayer2nd.Count != 1)
+                    {
+                        leftDimValue -= 350;
+                    }
+                    rebarLayer2nd = rebarLayer2nd.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer2nd.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer2nd[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer2nd[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue - 350, StraightDim2ndLayerAttribute);
+                        }
+                        else
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer2nd[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer2nd[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue, StraightDim2ndLayerAttribute);
+                        }
+                    }
+                    leftDimValue -= 350;
+                }
+
+                if (rebarLayer1st.Count != 0)
+                {
+                    if (rebarLayer1st.Count != 1)
+                    {
+                        leftDimValue -= 350;
+                    }
+                    rebarLayer1st = rebarLayer1st.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer1st.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer1st[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer1st[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            if (rebarLayer1st[i].rebarLayer == "")
+                            {
+                                sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue - 350, StraightDimAttribute);
+                            }
+                            else
+                            {
+                                sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue - 350, StraightDim1stLayerAttribute);
+                            }
+                        }
+                        else
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer1st[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, rebarLayer1st[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            if (rebarLayer1st[i].rebarLayer == "")
+                            {
+                                sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue, StraightDimAttribute);
+                            }
+                            else
+                            {
+                                sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue, StraightDim1stLayerAttribute);
+                            }
+                        }
+                    }
+                    leftDimValue -= 700;
+                }
+                #endregion
+            }
+            #endregion
+
+            #region Near Face
+            if (nearFaceRebars.Count != 0)
+            {
+                #region Insert Rebar by Layer
+                List<DWallRebar> rebarLayer1st = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer2nd = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer3rd = new List<DWallRebar>();
+                List<DWallRebar> rebarLayer4th = new List<DWallRebar>();
+                foreach (DWallRebar dWallRebar in nearFaceRebars)
+                {
+                    if (dWallRebar.rebarLayer == "1st LAYER" || dWallRebar.rebarLayer == "")
+                    {
+                        rebarLayer1st.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "2nd LAYER")
+                    {
+                        rebarLayer2nd.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "3rd LAYER")
+                    {
+                        rebarLayer3rd.Add(dWallRebar);
+                    }
+                    else if (dWallRebar.rebarLayer == "4th LAYER")
+                    {
+                        rebarLayer4th.Add(dWallRebar);
+                    }
+                }
+                #endregion
+
+                #region Dim by Layer
+                if (rebarLayer4th.Count != 0)
+                {
+                    if (rebarLayer4th.Count != 1)
+                    {
+                        rightDimValue += 350;
+                    }
+                    rebarLayer4th = rebarLayer4th.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer4th.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer4th[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer4th[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, rightDimValue + 350, StraightDim4thLayerAttribute);
+                        }
+                        else
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer4th[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer4th[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, rightDimValue, StraightDim4thLayerAttribute);
+                        }
+                    }
+                    rightDimValue += 350;
+                }
+
+                if (rebarLayer3rd.Count != 0)
+                {
+                    if (rebarLayer3rd.Count != 1)
+                    {
+                        rightDimValue += 350;
+                    }
+                    rebarLayer3rd = rebarLayer3rd.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer3rd.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer3rd[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer3rd[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, rightDimValue + 350, StraightDim3rdLayerAttribute);
+                        }
+                        else
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer3rd[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer3rd[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, rightDimValue, StraightDim3rdLayerAttribute);
+                        }
+                    }
+                    rightDimValue += 350;
+                }
+
+                if (rebarLayer2nd.Count != 0)
+                {
+                    if (rebarLayer2nd.Count != 1)
+                    {
+                        rightDimValue += 350;
+                    }
+                    rebarLayer2nd = rebarLayer2nd.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer2nd.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer2nd[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer2nd[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, rightDimValue + 350, StraightDim2ndLayerAttribute);
+                        }
+                        else
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer2nd[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer2nd[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            sdsh.CreateDimensionSet(frontView, pointList, vX, rightDimValue, StraightDim2ndLayerAttribute);
+                        }
+                    }
+                    rightDimValue += 350;
+                }
+
+                if (rebarLayer1st.Count != 0)
+                {
+                    if (rebarLayer1st.Count != 1)
+                    {
+                        rightDimValue += 350;
+                    }
+                    rebarLayer1st = rebarLayer1st.OrderByDescending(n => n.topRebarPoint.Y).ToList();
+                    for (int i = 0; i < rebarLayer1st.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer1st[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer1st[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            if (rebarLayer1st[i].rebarLayer == "")
+                            {
+                                sdsh.CreateDimensionSet(frontView, pointList, vX, rightDimValue + 350, StraightDimAttribute);
+                            }
+                            else
+                            {
+                                sdsh.CreateDimensionSet(frontView, pointList, vX, rightDimValue + 350, StraightDim1stLayerAttribute);
+                            }
+                        }
+                        else
+                        {
+                            TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer1st[i].topRebarPoint.Y, 0);
+                            TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MaxPoint.X, rebarLayer1st[i].botRebarPoint.Y, 0);
+                            PointList pointList = new PointList()
+                            {
+                                topPoint,
+                                botPoint
+                            };
+                            if (rebarLayer1st[i].rebarLayer == "")
+                            {
+                                sdsh.CreateDimensionSet(frontView, pointList, vX, rightDimValue, StraightDimAttribute);
+                            }
+                            else
+                            {
+                                sdsh.CreateDimensionSet(frontView, pointList, vX, rightDimValue, StraightDim1stLayerAttribute);
+                            }
+                        }
+                    }
+                    rightDimValue += 350;
+                }
+                #endregion
+            }
+            #endregion
+            #endregion
+
+            #region Dim by Cage No
+            StraightDimensionSetAttributes StraightDim1stCageAttribute = new StraightDimensionSetAttributes("DWall-Dim-1stCage");
+            StraightDimensionSetAttributes StraightDim2ndCageAttribute = new StraightDimensionSetAttributes("DWall-Dim-2ndCage");
+            StraightDimensionSetAttributes StraightDim3rdCageAttribute = new StraightDimensionSetAttributes("DWall-Dim-3rdCage");
+            StraightDimensionSetAttributes StraightDim4thCageAttribute = new StraightDimensionSetAttributes("DWall-Dim-4thCage");
+            if (cage1stRebars.Count != 0)
+            {
+                TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, cage1stRebars[0].topRebarPoint.Y, 0);
+                TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, cage1stRebars[0].botRebarPoint.Y, 0);
+                foreach (DWallRebar dWallRebar in cage1stRebars)
+                {
+                    if (dWallRebar.topRebarPoint.Y > topPoint.Y)
+                    {
+                        topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, dWallRebar.topRebarPoint.Y, 0);
+                    }
+                    if (dWallRebar.botRebarPoint.Y < botPoint.Y)
+                    {
+                        botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, dWallRebar.botRebarPoint.Y, 0);
+                    }
+                }
+
+                PointList pointList = new PointList()
+                {
+                    topPoint,
+                    botPoint
+                };
+                sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue - 350, StraightDim1stCageAttribute);
+            }
+            if (cage2ndRebars.Count != 0)
+            {
+                TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, cage2ndRebars[0].topRebarPoint.Y, 0);
+                TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, cage2ndRebars[0].botRebarPoint.Y, 0);
+                foreach (DWallRebar dWallRebar in cage2ndRebars)
+                {
+                    if (dWallRebar.topRebarPoint.Y > topPoint.Y)
+                    {
+                        topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, dWallRebar.topRebarPoint.Y, 0);
+                    }
+                    if (dWallRebar.botRebarPoint.Y < botPoint.Y)
+                    {
+                        botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, dWallRebar.botRebarPoint.Y, 0);
+                    }
+                }
+
+                PointList pointList = new PointList()
+                {
+                    topPoint,
+                    botPoint
+                };
+                sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue, StraightDim2ndCageAttribute);
+            }
+            if (cage3rdRebars.Count != 0)
+            {
+                TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, cage3rdRebars[0].topRebarPoint.Y, 0);
+                TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, cage3rdRebars[0].botRebarPoint.Y, 0);
+                foreach (DWallRebar dWallRebar in cage3rdRebars)
+                {
+                    if (dWallRebar.topRebarPoint.Y > topPoint.Y)
+                    {
+                        topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, dWallRebar.topRebarPoint.Y, 0);
+                    }
+                    if (dWallRebar.botRebarPoint.Y < botPoint.Y)
+                    {
+                        botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, dWallRebar.botRebarPoint.Y, 0);
+                    }
+                }
+
+                PointList pointList = new PointList()
+                {
+                    topPoint,
+                    botPoint
+                };
+                sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue - 350, StraightDim3rdCageAttribute);
+            }
+            if (cage4thRebars.Count != 0)
+            {
+                TSG.Point topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, cage4thRebars[0].topRebarPoint.Y, 0);
+                TSG.Point botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, cage4thRebars[0].botRebarPoint.Y, 0);
+                foreach (DWallRebar dWallRebar in cage4thRebars)
+                {
+                    if (dWallRebar.topRebarPoint.Y > topPoint.Y)
+                    {
+                        topPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, dWallRebar.topRebarPoint.Y, 0);
+                    }
+                    if (dWallRebar.botRebarPoint.Y < botPoint.Y)
+                    {
+                        botPoint = new TSG.Point(frontView.RestrictionBox.MinPoint.X, dWallRebar.botRebarPoint.Y, 0);
+                    }
+                }
+
+                PointList pointList = new PointList()
+                {
+                    topPoint,
+                    botPoint
+                };
+                sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue, StraightDim4thCageAttribute);
+            }
+            #endregion
+            #endregion
+
+            #region Rotate 90 view
+            frontView.RotateViewOnDrawingPlane(90);
+            frontView.Select();
+            model.GetWorkPlaneHandler().SetCurrentTransformationPlane(new TransformationPlane());
+            model.GetWorkPlaneHandler().SetCurrentTransformationPlane(GetTransformationPlane(frontView));
+            frontView.Select();
             #endregion
         }
     }

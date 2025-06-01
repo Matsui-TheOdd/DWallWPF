@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IntraforDrawing")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+69950d6cccda3ca25a5f898903d596374f2066eb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9cc51cddf8b2fcecf047748ad8f73a02dbec5030")]
 [assembly: System.Reflection.AssemblyProductAttribute("IntraforDrawing")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IntraforDrawing")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
