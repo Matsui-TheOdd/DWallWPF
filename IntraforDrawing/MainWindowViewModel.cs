@@ -21,6 +21,7 @@ using static Tekla.Structures.Drawing.StraightDimensionSet;
 using System.Windows.Controls;
 using static Tekla.Structures.Drawing.Text;
 using static Tekla.Structures.Drawing.LevelMark;
+using static Tekla.Structures.Drawing.Line;
 
 namespace IntraforDrawing
 {
@@ -405,13 +406,13 @@ namespace IntraforDrawing
 
             if (isContainBot)
             {
-                if (Math.Abs(pointList[pointList.Count].Y - pointList[pointList.Count - 1].Y) < 400)
+                if (Math.Abs(pointList[pointList.Count - 1].Y - pointList[pointList.Count - 2].Y) < 400)
                 {
-                    listLevelMark.Add(CreateLevelMark(view, pointList[pointList.Count], new TSG.Vector(0, -1, 0)));
+                    listLevelMark.Add(CreateLevelMark(view, pointList[pointList.Count - 1], new TSG.Vector(0, -1, 0)));
                 }
                 else
                 {
-                    listLevelMark.Add(CreateLevelMark(view, pointList[pointList.Count], vY));
+                    listLevelMark.Add(CreateLevelMark(view, pointList[pointList.Count - 1], vY));
                 }
             }
 
@@ -739,7 +740,9 @@ namespace IntraforDrawing
             if (dh.GetConnectionStatus())
             {
                 dh.SetActiveDrawing(drawing);
-
+                vX = new TSG.Vector(1, 0, 0);
+                vY = new TSG.Vector(0, 1, 0);
+                vZ = new TSG.Vector(0, 0, 1);
                 #region Get Showing Panel
                 List<string> cageNos = listSplit.ToCharArray()
                                    .Select(c => c.ToString())
@@ -819,7 +822,7 @@ namespace IntraforDrawing
                 #region Modify Front View Range
                 model.GetWorkPlaneHandler().SetCurrentTransformationPlane(new TransformationPlane());
                 model.GetWorkPlaneHandler().SetCurrentTransformationPlane(GetTransformationPlane(frontView));
-
+                
                 TSG.Point topPoint = new TSG.Point(0, double.MinValue, 0);
                 TSG.Point botPoint = new TSG.Point(0, double.MaxValue, 0);
                 foreach (DWallBeam dWall in listShowPanel)
@@ -848,7 +851,7 @@ namespace IntraforDrawing
                     {
                         botPanelPoint = dWall.minPoint;
                     }
-                } 
+                }
 
                 if (!isContainTop)
                 {
@@ -861,6 +864,7 @@ namespace IntraforDrawing
                 frontView.Modify();
 
                 model.GetWorkPlaneHandler().SetCurrentTransformationPlane(new TransformationPlane());
+                frontView.Select();
                 TSG.Point centerView = frontView.ExtremaCenter;
                 double moveDown = centerView.Y - 117;
                 frontView.Origin = frontView.Origin - vY * moveDown;
@@ -926,6 +930,10 @@ namespace IntraforDrawing
             .Select(group => group.ToList())
             .ToList();
 
+            double cageStartX = 0;
+            double cageEndX = 0;
+
+            List<StraightDimensionSet> list500 = new List<StraightDimensionSet>();
             List<TSG.Point> cagePointList = new List<TSG.Point>() { new TSG.Point(frontView.RestrictionBox.MinPoint.X, frontView.RestrictionBox.MinPoint.Y, 0) };
             foreach (List<DWallRebar> rebarByCage in splitedByCageRebars)
             {
@@ -968,20 +976,46 @@ namespace IntraforDrawing
                 string cageN = rebarByCage[0].cageName.Replace("CAGE ", "");
 
                 StraightDimensionSetAttributes StraightCageDimAttribute = new StraightDimensionSetAttributes("DWall-Dim" + cageN);
-                new StraightDimension(frontView, leftPoint, rightPoint, vY, -500, StraightCageDimAttribute).Insert();
+                PointList pointList = new PointList()
+                    {
+                        leftPoint,
+                        rightPoint
+                    };
+                StraightDimensionSet dim = sdsh.CreateDimensionSet(frontView, pointList, vY, -500, StraightCageDimAttribute);
+                list500.Add(dim);
+                #endregion
+
+                #region Cage Start End X Value
+                if (rebarByCage[0].cageName == cageName)
+                {
+                    cageStartX = leftPoint.X;
+                    cageEndX = rightPoint.X;
+                }
                 #endregion
             }
             cagePointList.Add(new TSG.Point(frontView.RestrictionBox.MaxPoint.X, frontView.RestrictionBox.MinPoint.Y, 0));
+            cagePointList = cagePointList.OrderBy(x => x.X).ToList();
             #endregion
 
             #region Horizontal Dim
             for (int i = 0; i < cagePointList.Count - 1; i += 2)
             {
-                new StraightDimension(frontView, cagePointList[i], cagePointList[i + 1], vY, -500, StraightDimAttribute).Insert();
+                PointList pointList = new PointList()
+                    {
+                        cagePointList[i],
+                        cagePointList[i + 1]
+                    };
+                StraightDimensionSet dim = sdsh.CreateDimensionSet(frontView, pointList, vY, -500, StraightDimAttribute);
+                list500.Add(dim);
             }
 
             StraightDimensionSetAttributes StraightTotalDimAttribute = new StraightDimensionSetAttributes("DWall-DimP");
-            new StraightDimension(frontView, cagePointList[0], cagePointList[cagePointList.Count - 1], vY, -1200, StraightTotalDimAttribute).Insert();
+            PointList _pointList = new PointList()
+                    {
+                        cagePointList[0],
+                        cagePointList[cagePointList.Count - 1]
+                    };
+            StraightDimensionSet dim1200 = sdsh.CreateDimensionSet(frontView, _pointList, vY, -1200, StraightTotalDimAttribute);
             #endregion
 
             #region Get Neighbor
@@ -1023,7 +1057,7 @@ namespace IntraforDrawing
             }
             #endregion
 
-            #region Create Neighbor Panel Connect
+            #region Neighbor Connection
             #region Left
             if (leftPartName != "")
             {
@@ -1074,6 +1108,40 @@ namespace IntraforDrawing
                 }
             }
             #endregion
+
+            #region Break Line
+            if (!isContainTop)
+            {
+                TSG.Point point1 = new TSG.Point(frontView.RestrictionBox.MinPoint.X - 120, frontView.RestrictionBox.MaxPoint.Y, 0);
+                TSG.Point point2 = new TSG.Point((frontView.RestrictionBox.MinPoint.X + frontView.RestrictionBox.MaxPoint.X) / 2 - 100, point1.Y, 0);
+                TSG.Point point3 = new TSG.Point((frontView.RestrictionBox.MinPoint.X + frontView.RestrictionBox.MaxPoint.X) / 2 - 50, point1.Y - 200, 0);
+                TSG.Point point4 = new TSG.Point((frontView.RestrictionBox.MinPoint.X + frontView.RestrictionBox.MaxPoint.X) / 2 + 50, point1.Y + 200, 0);
+                TSG.Point point5 = new TSG.Point((frontView.RestrictionBox.MinPoint.X + frontView.RestrictionBox.MaxPoint.X) / 2 + 100, point1.Y, 0);
+                TSG.Point point6 = new TSG.Point(frontView.RestrictionBox.MaxPoint.X + 120, frontView.RestrictionBox.MaxPoint.Y, 0);
+
+                new TSD.Line(frontView, point1, point2, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(frontView, point2, point3, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(frontView, point3, point4, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(frontView, point4, point5, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(frontView, point5, point6, new LineAttributes("DWall-BreakLine")).Insert();
+            }
+
+            if (!isContainBot)
+            {
+                TSG.Point point1 = new TSG.Point(frontView.RestrictionBox.MinPoint.X - 120, frontView.RestrictionBox.MinPoint.Y, 0);
+                TSG.Point point2 = new TSG.Point((frontView.RestrictionBox.MinPoint.X + frontView.RestrictionBox.MaxPoint.X) / 2 - 100, point1.Y, 0);
+                TSG.Point point3 = new TSG.Point((frontView.RestrictionBox.MinPoint.X + frontView.RestrictionBox.MaxPoint.X) / 2 - 50, point1.Y - 200, 0);
+                TSG.Point point4 = new TSG.Point((frontView.RestrictionBox.MinPoint.X + frontView.RestrictionBox.MaxPoint.X) / 2 + 50, point1.Y + 200, 0);
+                TSG.Point point5 = new TSG.Point((frontView.RestrictionBox.MinPoint.X + frontView.RestrictionBox.MaxPoint.X) / 2 + 100, point1.Y, 0);
+                TSG.Point point6 = new TSG.Point(frontView.RestrictionBox.MaxPoint.X + 120, frontView.RestrictionBox.MinPoint.Y, 0);
+
+                new TSD.Line(frontView, point1, point2, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(frontView, point2, point3, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(frontView, point3, point4, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(frontView, point4, point5, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(frontView, point5, point6, new LineAttributes("DWall-BreakLine")).Insert();
+            }
+            #endregion
             #endregion
 
             #region View Name
@@ -1082,7 +1150,7 @@ namespace IntraforDrawing
             TSG.Point note1Point = namePoint - vY * 400;
             new Text(frontView, note1Point, "SHEAR & HORI. REINFORCEMENT NOT SHOWN FOR CLARITY", new TextAttributes("CENTER-NOTE1-TEXT")).Insert();
             TSG.Point note2Point = note1Point - vY * 300;
-            new Text(frontView, note2Point, "(VIEWED FROM NEAR FACE)", new TextAttributes("CENTER-NOTE2-TEXT")).Insert();
+            new Text(frontView, note2Point, "(VIEWED FROM EXCAVATION FACE)", new TextAttributes("CENTER-NOTE2-TEXT")).Insert();
             TSG.Point scalePoint = note2Point - vY * 300;
             new Text(frontView, scalePoint, "SCALE 1:100", new TextAttributes("CENTER-NOTE1-TEXT")).Insert();
             #endregion
@@ -1212,6 +1280,21 @@ namespace IntraforDrawing
             #region Reinforcement Level Mark
             List<LevelMark> farFaceLevelMark = CreateRebarLevelMark(frontView, farFaceRebars, levelLeftXValue, isContainTop, isContainBot);
             List<LevelMark> nearFaceLevelMark = CreateRebarLevelMark(frontView, nearFaceRebars, levelRightXValue, isContainTop, isContainBot);
+
+            foreach (LevelMark levelMark in farFaceLevelMark)
+            {
+                if (levelMark.BasePoint.Y > frontView.RestrictionBox.MaxPoint.Y || levelMark.BasePoint.Y < frontView.RestrictionBox.MinPoint.Y)
+                {
+                    levelMark.Delete();
+                }
+            }
+            foreach (LevelMark levelMark in nearFaceLevelMark)
+            {
+                if (levelMark.BasePoint.Y > frontView.RestrictionBox.MaxPoint.Y || levelMark.BasePoint.Y < frontView.RestrictionBox.MinPoint.Y)
+                {
+                    levelMark.Delete();
+                }
+            }
             #endregion
 
             #region Positioning Reinforcement
@@ -1963,21 +2046,24 @@ namespace IntraforDrawing
                 List<DWallRebar> rebarLayer4th = new List<DWallRebar>();
                 foreach (DWallRebar dWallRebar in farFaceRebars)
                 {
-                    if (dWallRebar.rebarLayer == "1st LAYER" || dWallRebar.rebarLayer == "")
+                    if (dWallRebar.topRebarPoint.Y <= frontView.RestrictionBox.MaxPoint.Y && dWallRebar.botRebarPoint.Y >= frontView.RestrictionBox.MinPoint.Y)
                     {
-                        rebarLayer1st.Add(dWallRebar);
-                    }
-                    else if (dWallRebar.rebarLayer == "2nd LAYER")
-                    {
-                        rebarLayer2nd.Add(dWallRebar);
-                    }
-                    else if (dWallRebar.rebarLayer == "3rd LAYER")
-                    {
-                        rebarLayer3rd.Add(dWallRebar);
-                    }
-                    else if (dWallRebar.rebarLayer == "4th LAYER")
-                    {
-                        rebarLayer4th.Add(dWallRebar);
+                        if (dWallRebar.rebarLayer == "1st LAYER" || dWallRebar.rebarLayer == "")
+                        {
+                            rebarLayer1st.Add(dWallRebar);
+                        }
+                        else if (dWallRebar.rebarLayer == "2nd LAYER")
+                        {
+                            rebarLayer2nd.Add(dWallRebar);
+                        }
+                        else if (dWallRebar.rebarLayer == "3rd LAYER")
+                        {
+                            rebarLayer3rd.Add(dWallRebar);
+                        }
+                        else if (dWallRebar.rebarLayer == "4th LAYER")
+                        {
+                            rebarLayer4th.Add(dWallRebar);
+                        }
                     }
                 }
                 #endregion
@@ -2150,21 +2236,24 @@ namespace IntraforDrawing
                 List<DWallRebar> rebarLayer4th = new List<DWallRebar>();
                 foreach (DWallRebar dWallRebar in nearFaceRebars)
                 {
-                    if (dWallRebar.rebarLayer == "1st LAYER" || dWallRebar.rebarLayer == "")
+                    if (dWallRebar.topRebarPoint.Y <= frontView.RestrictionBox.MaxPoint.Y && dWallRebar.botRebarPoint.Y >= frontView.RestrictionBox.MinPoint.Y)
                     {
-                        rebarLayer1st.Add(dWallRebar);
-                    }
-                    else if (dWallRebar.rebarLayer == "2nd LAYER")
-                    {
-                        rebarLayer2nd.Add(dWallRebar);
-                    }
-                    else if (dWallRebar.rebarLayer == "3rd LAYER")
-                    {
-                        rebarLayer3rd.Add(dWallRebar);
-                    }
-                    else if (dWallRebar.rebarLayer == "4th LAYER")
-                    {
-                        rebarLayer4th.Add(dWallRebar);
+                        if (dWallRebar.rebarLayer == "1st LAYER" || dWallRebar.rebarLayer == "")
+                        {
+                            rebarLayer1st.Add(dWallRebar);
+                        }
+                        else if (dWallRebar.rebarLayer == "2nd LAYER")
+                        {
+                            rebarLayer2nd.Add(dWallRebar);
+                        }
+                        else if (dWallRebar.rebarLayer == "3rd LAYER")
+                        {
+                            rebarLayer3rd.Add(dWallRebar);
+                        }
+                        else if (dWallRebar.rebarLayer == "4th LAYER")
+                        {
+                            rebarLayer4th.Add(dWallRebar);
+                        }
                     }
                 }
                 #endregion
@@ -2349,12 +2438,15 @@ namespace IntraforDrawing
                     }
                 }
 
-                PointList pointList = new PointList()
+                if (topPoint.Y <= frontView.RestrictionBox.MaxPoint.Y && botPoint.Y >= frontView.RestrictionBox.MinPoint.Y)
                 {
-                    topPoint,
-                    botPoint
-                };
-                sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue - 350, StraightDim1stCageAttribute);
+                    PointList pointList = new PointList()
+                    {
+                        topPoint,
+                        botPoint
+                    };
+                    sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue - 350, StraightDim1stCageAttribute);
+                }
             }
             if (cage2ndRebars.Count != 0)
             {
@@ -2372,12 +2464,15 @@ namespace IntraforDrawing
                     }
                 }
 
-                PointList pointList = new PointList()
+                if (topPoint.Y <= frontView.RestrictionBox.MaxPoint.Y && botPoint.Y >= frontView.RestrictionBox.MinPoint.Y)
                 {
-                    topPoint,
-                    botPoint
-                };
-                sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue, StraightDim2ndCageAttribute);
+                    PointList pointList = new PointList()
+                    {
+                        topPoint,
+                        botPoint
+                    };
+                    sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue, StraightDim2ndCageAttribute);
+                }
             }
             if (cage3rdRebars.Count != 0)
             {
@@ -2395,12 +2490,15 @@ namespace IntraforDrawing
                     }
                 }
 
-                PointList pointList = new PointList()
+                if (topPoint.Y <= frontView.RestrictionBox.MaxPoint.Y && botPoint.Y >= frontView.RestrictionBox.MinPoint.Y)
                 {
-                    topPoint,
-                    botPoint
-                };
-                sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue - 350, StraightDim3rdCageAttribute);
+                    PointList pointList = new PointList()
+                    {
+                        topPoint,
+                        botPoint
+                    };
+                    sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue - 350, StraightDim3rdCageAttribute);
+                }
             }
             if (cage4thRebars.Count != 0)
             {
@@ -2418,14 +2516,39 @@ namespace IntraforDrawing
                     }
                 }
 
-                PointList pointList = new PointList()
+                if (topPoint.Y <= frontView.RestrictionBox.MaxPoint.Y && botPoint.Y >= frontView.RestrictionBox.MinPoint.Y)
                 {
-                    topPoint,
-                    botPoint
-                };
-                sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue, StraightDim4thCageAttribute);
+                    PointList pointList = new PointList()
+                    {
+                        topPoint,
+                        botPoint
+                    };
+                    sdsh.CreateDimensionSet(frontView, pointList, vX, leftDimValue, StraightDim4thCageAttribute);
+                }
             }
             #endregion
+            #endregion
+
+            #region Vertical Section
+            if (allNFFFRebars.Count != 0)
+            {
+                double minY = frontView.RestrictionBox.MinPoint.Y;
+                double maxY = frontView.RestrictionBox.MaxPoint.Y;
+                TSD.View.ViewAttributes sectionAttributes = new TSD.View.ViewAttributes(cageName + " Front Section");
+                SectionMarkBase.SectionMarkAttributes sectionMarkAttributes = new SectionMarkBase.SectionMarkAttributes("DWall-VerticalSection");
+                TSD.View.CreateSectionView(frontView, new TSG.Point(cageStartX, maxY, 0), new TSG.Point(cageStartX, minY, 0), new TSG.Point(210, 240, 0), cageEndX - cageStartX + 50, 50, sectionAttributes, sectionMarkAttributes, out TSD.View verticalSection, out SectionMark verticalSectionMark);
+                Macro.Load_ViewAttribute_Filter_And_EditSetting(verticalSection, cageName + " Front Section");
+                verticalSection.Modify();
+
+                string cageN = cageName.Replace("CAGE ", "");
+                verticalSection.Name = "1" + cageN;
+                verticalSection.Modify();
+
+                verticalSectionMark.Attributes.MarkName = "1" + cageN;
+                verticalSectionMark.Modify();
+
+                //ModifyVerticalSection(verticalSection, dWallBeam, cageName);
+            }
             #endregion
 
             #region Rotate 90 view
@@ -2435,6 +2558,25 @@ namespace IntraforDrawing
             model.GetWorkPlaneHandler().SetCurrentTransformationPlane(GetTransformationPlane(frontView));
             frontView.Select();
             #endregion
+
+            #region Modify Cage Dim
+            foreach (StraightDimensionSet straightDimension in list500)
+            {
+                straightDimension.Select();
+                straightDimension.Distance = -500;
+                straightDimension.Modify();
+            }
+
+            dim1200.Select();
+            dim1200.Distance = -1200;
+            dim1200.Modify();
+
+            //frontView.Modify();
+            #endregion
+        }
+        private void EditVerticalSection(TSD.View sectionView)
+        {
+
         }
     }
 }

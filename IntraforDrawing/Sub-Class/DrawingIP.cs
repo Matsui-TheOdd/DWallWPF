@@ -29,7 +29,7 @@ namespace IntraforDrawing
             set { _Comment = value; OnPropertyChanged(); }
         }
 
-        public DrawingIP (string _panel, string _title_1, string _comment)
+        public DrawingIP(string _panel, string _title_1, string _comment)
         {
             Panel = _panel;
             Tilte_1 = _title_1;
