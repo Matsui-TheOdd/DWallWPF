@@ -29,11 +29,17 @@ namespace IntraforDrawing
             set { _Comment = value; OnPropertyChanged(); }
         }
 
-        public DrawingIP(string _panel, string _title_1, string _comment)
+        private int _NumberOfDrawings;
+        public int NumberOfDrawings
+        {
+            get { return _NumberOfDrawings; }
+            set { _NumberOfDrawings = value; OnPropertyChanged(); }
+        }
+
+        public DrawingIP(string _panel, int _numberOfDrawings)
         {
             Panel = _panel;
-            Tilte_1 = _title_1;
-            Comment = _comment;
+            NumberOfDrawings = _numberOfDrawings;
         }
     }
 }

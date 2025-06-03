@@ -13,7 +13,7 @@
                            mc:Ignorable="d"
                            VerticalContentAlignment="Center"
                            HorizontalContentAlignment="Center"
-                           Width="800">
+                           MinWidth="800">
     <d:UserControl.DataContext>
         <local:MainWindowViewModel />
     </d:UserControl.DataContext>
@@ -171,6 +171,24 @@
                 <Setter Property="Margin"
                         Value="3" />
             </Style>
+            <Style x:Key="HorizontalHeaderStyle"
+                   TargetType="DataGridColumnHeader">
+                <Setter Property="LayoutTransform">
+                    <Setter.Value>
+                        <RotateTransform Angle="0" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Center" />
+                <Setter Property="MinWidth"
+                        Value="100" />
+                <Setter Property="Height"
+                        Value="auto" />
+                <Setter Property="Margin"
+                        Value="3" />
+            </Style>
             <Style x:Key="VerticalHeaderStyle_100"
                    TargetType="DataGridColumnHeader">
                 <Setter Property="LayoutTransform">
@@ -261,7 +279,7 @@
             <Style x:Key="Silver"
                    TargetType="DataGridCell">
                 <Setter Property="Background"
-                        Value="Silver" />
+                        Value="LightGray" />
                 <Setter Property="Margin"
                         Value="0"></Setter>
                 <Setter Property="Padding"
@@ -283,7 +301,7 @@
                               Margin="5,2,5,2">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2.5*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -295,7 +313,6 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
                             <RowDefinition Height="auto"></RowDefinition>
                         </Grid.RowDefinitions>
                         <DataGrid Grid.Row="0"
@@ -317,54 +334,61 @@
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Panel,StringFormat=N3}"
-                                                    HeaderStyle="{StaticResource VerticalHeaderStyle}"
+                                <DataGridTextColumn Binding="{Binding Panel}"
+                                                    HeaderStyle="{StaticResource HorizontalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
                                                     CellStyle="{StaticResource Silver}"
                                                     Header="Panel" />
 
-                                <DataGridTextColumn Binding="{Binding Tilte_1,StringFormat=N3}"
-                                                    HeaderStyle="{StaticResource VerticalHeaderStyle}"
+                                <DataGridTextColumn Binding="{Binding NumberOfDrawings}"
+                                                    HeaderStyle="{StaticResource HorizontalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
-                                                    CellStyle="{StaticResource DefaultDataGridCell}"
-                                                    Header="Tilte 1" />
-
-                                <DataGridTextColumn Binding="{Binding Comment}"
-                                                    HeaderStyle="{StaticResource VerticalHeaderStyle}"
-                                                    ElementStyle="{StaticResource DefaultTextColumnStyle}"
-                                                    CellStyle="{StaticResource Silver}"
-                                                    Header="Note" />
+                                                    CellStyle="{StaticResource Moccasin}"
+                                                    Header="Number Of Drawings" />
                             </DataGrid.Columns>
                         </DataGrid>
                         <StackPanel Grid.Row="1"
-                                    Orientation="Horizontal"
-                                    Margin="0, 0, 0, 5">
-                            <UIControls:WpfFilterCheckBox AttributeName="AT_Max_Length"
-                                                          Content="Max Panel Length:" />
-                            <TextBox Height="23"
-                                     Width="80"
-                                     Text="{Binding AT_Max_Length, Mode=TwoWay}" />
-
-                            <UIControls:WpfFilterCheckBox AttributeName="AT_Tilte_1"
+                                    Orientation="Vertical"
+                                    Margin="0">
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0 0 0 5">
+                                <UIControls:WpfFilterCheckBox AttributeName="AT_Tilte_1"
                                                           Content="First Drawing Title:" />
-                            <TextBox Height="23"
-                                     Width="230"
+                                <TextBox Height="23"
+                                     Width="170"
                                      Text="{Binding AT_Tilte_1, Mode=TwoWay}" />
-                        </StackPanel>
-                        <StackPanel Grid.Row="2"
-                                    Orientation="Horizontal">
-                            <Button Content="Create Drawings"
-                                    Width="110"
+                                <Button Content="Get Sections By Panel"
+                                    Width="150"
+                                    Height="23"
+                                    Command="{Binding Suggest_Section}"></Button>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0 0 0 5">
+                                <UIControls:WpfFilterCheckBox AttributeName="AT_Max_Length"
+                      Content="Max Panel Height Show in Drawing:" />
+                                <TextBox Height="23"
+ Width="80"
+ Text="{Binding AT_Max_Length, Mode=TwoWay}" />
+                                <Button Content="Modify Panel Drawings"
+                                    Width="150"
+                                    Height="23"
+                                    Command="{Binding Modify_Drawing}"></Button>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0 0 0 0">
+                                <Button Content="Create Drawings By Panel"
+                                    Width="170"
                                     Height="23"
                                     Command="{Binding Create_Drawings}"></Button>
-                            <Button Content="Get Exist Drawings"
-                                    Width="120"
+                                <Button Content="Get Exist Drawings By Panel"
+                                    Width="180"
                                     Height="23"
                                     Command="{Binding Get_Exist_Drawings}"></Button>
-                            <Button Content="Create Reports (BBS)"
+                                <Button Content="Create Reports (BBS)"
                                     Height="23"
-                                    Width="120"
+                                    Width="140"
                                     Command="{Binding Create_Reports}"></Button>
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
                 </GroupBox>
@@ -374,7 +398,6 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
                         </Grid.RowDefinitions>
                         <DataGrid Grid.Row="0"
                                   x:Name="DtG_HorizontalSection"
@@ -407,32 +430,19 @@
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Panel, StringFormat=N3}"
-                                                    HeaderStyle="{StaticResource VerticalHeaderStyle}"
+                                <DataGridTextColumn Binding="{Binding Panel}"
+                                                    HeaderStyle="{StaticResource HorizontalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
-                                                    CellStyle="{StaticResource DefaultDataGridCell}"
+                                                    CellStyle="{StaticResource Silver}"
                                                     Header="Panel" />
 
                                 <DataGridTextColumn Binding="{Binding Level,StringFormat=N3}"
-                                                    HeaderStyle="{StaticResource VerticalHeaderStyle}"
+                                                    HeaderStyle="{StaticResource HorizontalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
-                                                    CellStyle="{StaticResource Silver}"
+                                                    CellStyle="{StaticResource Moccasin}"
                                                     Header="Level" />
                             </DataGrid.Columns>
                         </DataGrid>
-                        <StackPanel Grid.Row="1"
-                                    Orientation="Vertical"
-                                    Margin="0">
-                            <Button Content="Suggest Section"
-                                    Width="120"
-                                    Height="23"
-                                    Command="{Binding Suggest_Section}"></Button>
-                            <Button Content="Modify Drawing"
-                                    Width="120"
-                                    Height="23"
-                                    Margin="0 5 0 0"
-                                    Command="{Binding Modify_Drawing}"></Button>
-                        </StackPanel>
                     </Grid>
                 </GroupBox>
             </Grid>

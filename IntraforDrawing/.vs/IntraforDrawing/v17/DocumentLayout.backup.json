@@ -1,18 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Github\\DWallWPF\\IntraforDrawing\\",
+  "WorkspaceRootPath": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|d:\\github\\dwallwpf\\intrafordrawing\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|d:\\tsopenapiexamples-2024\\model\\applications\\intrafordrawing\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|d:\\github\\dwallwpf\\intrafordrawing\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|d:\\tsopenapiexamples-2024\\model\\applications\\intrafordrawing\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|d:\\github\\dwallwpf\\intrafordrawing\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|d:\\tsopenapiexamples-2024\\model\\applications\\intrafordrawing\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
       "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|d:\\tsopenapiexamples-2024\\model\\applications\\intrafordrawing\\sub-class\\drawingip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A42CB57-881D-1304-0BD3-98D13D00F57A}|IntraforDrawing.csproj|solutionrelative:sub-class\\drawingip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,17 +26,41 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "MainWindow.xaml",
+              "ToolTip": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-06-03T07:10:48.589Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DrawingIP.cs",
+              "DocumentMoniker": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\Sub-Class\\DrawingIP.cs",
+              "RelativeDocumentMoniker": "Sub-Class\\DrawingIP.cs",
+              "ToolTip": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\Sub-Class\\DrawingIP.cs",
+              "RelativeToolTip": "Sub-Class\\DrawingIP.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAxwCkAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-03T06:49:47.227Z"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "MainWindowViewModel.cs",
-              "DocumentMoniker": "D:\\Github\\DWallWPF\\IntraforDrawing\\MainWindowViewModel.cs",
+              "DocumentMoniker": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\MainWindowViewModel.cs",
               "RelativeDocumentMoniker": "MainWindowViewModel.cs",
-              "ToolTip": "D:\\Github\\DWallWPF\\IntraforDrawing\\MainWindowViewModel.cs",
+              "ToolTip": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\MainWindowViewModel.cs",
               "RelativeToolTip": "MainWindowViewModel.cs",
-              "ViewState": "AgIAAFsEAAAAAAAAAAAiwGUEAABnAAAAAAAAAA==",
+              "ViewState": "AgIAALMGAAAAAAAAAAAcwOAJAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-30T08:48:31.412Z",
               "EditorCaption": ""
@@ -41,25 +69,13 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "D:\\Github\\DWallWPF\\IntraforDrawing\\MainWindow.xaml.cs",
+              "DocumentMoniker": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
-              "ToolTip": "D:\\Github\\DWallWPF\\IntraforDrawing\\MainWindow.xaml.cs",
+              "ToolTip": "D:\\TSOpenAPIExamples-2024\\Model\\Applications\\IntraforDrawing\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
               "ViewState": "AgIAACUAAAAAAAAAAAAiwFEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-31T03:03:30.624Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "D:\\Github\\DWallWPF\\IntraforDrawing\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "MainWindow.xaml",
-              "ToolTip": "D:\\Github\\DWallWPF\\IntraforDrawing\\MainWindow.xaml",
-              "RelativeToolTip": "MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-05-30T08:48:07.846Z",
-              "EditorCaption": ""
             }
           ]
         }

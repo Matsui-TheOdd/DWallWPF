@@ -181,8 +181,6 @@ namespace IntraforDrawing
                                     frontCage.Title1 = titel1;
                                     frontCage.SetUserProperty("COMMENT", "Front View");
                                     frontCage.Insert();
-                                    DrawingIP newIP = new DrawingIP(assembly.Name, titel1, "Front View");
-                                    DrawingsIP.Add(newIP);
 
                                     drawingSheetNumber++;
                                     titel1 = IncrementLastSegment(titel1);
@@ -198,8 +196,6 @@ namespace IntraforDrawing
                                         frontCage.Title1 = titel1;
                                         frontCage.SetUserProperty("COMMENT", "Front View");
                                         frontCage.Insert();
-                                        DrawingIP newIP = new DrawingIP(assembly.Name, titel1, "Front View");
-                                        DrawingsIP.Add(newIP);
 
                                         drawingSheetNumber++;
                                         titel1 = IncrementLastSegment(titel1);
@@ -221,6 +217,9 @@ namespace IntraforDrawing
                                     }
                                 }
                             }
+
+                            DrawingIP newIP = new DrawingIP(assembly.Name, drawingSheetNumber - 1);
+                            DrawingsIP.Add(newIP);
                         }
                     }
                 }
@@ -2547,7 +2546,7 @@ namespace IntraforDrawing
                 verticalSectionMark.Attributes.MarkName = "1" + cageN;
                 verticalSectionMark.Modify();
 
-                //ModifyVerticalSection(verticalSection, dWallBeam, cageName);
+                EditVerticalSection(verticalSection, listPanel, listSlabs, cageName, listSplit, isContainTop, isContainBot);
             }
             #endregion
 
@@ -2574,9 +2573,316 @@ namespace IntraforDrawing
             //frontView.Modify();
             #endregion
         }
-        private void EditVerticalSection(TSD.View sectionView)
+        private void EditVerticalSection(TSD.View sectionView, List<TSM.Part> listPanel, List<TSM.Part> listSlabs, string cageName, string listSplit, bool isContainTop, bool isContainBot)
         {
+            model.GetWorkPlaneHandler().SetCurrentTransformationPlane(new TransformationPlane());
+            model.GetWorkPlaneHandler().SetCurrentTransformationPlane(GetTransformationPlane(sectionView));
+            sectionView.Select();
 
+            StraightDimensionSetHandler sdsh = new StraightDimensionSetHandler();
+            StraightDimensionSetAttributes StraightDimAttribute = new StraightDimensionSetAttributes("DWall-Dim");
+            StraightDimensionSetAttributes StraightDimAttributeP2 = new StraightDimensionSetAttributes("DWall-DimP2");
+
+            double levelLeftXValue = sectionView.RestrictionBox.MinPoint.X - 750;
+            double levelRightXValue = sectionView.RestrictionBox.MaxPoint.X + 550;
+
+            #region Get Panel
+            List<string> cageNos = listSplit.ToCharArray()
+                               .Select(c => c.ToString())
+                               .ToList();
+
+            List<DWallBeam> listShowPanel = new List<DWallBeam>();
+            List<DWallBeam> listFullPanel = new List<DWallBeam>();
+            foreach (TSM.Part _panel in listPanel)
+            {
+                DWallBeam dWallBeam = new DWallBeam(_panel);
+                if (dWallBeam.cageContain.Contains(cageName))
+                {
+                    listFullPanel.Add(dWallBeam);
+                    foreach (string cageNo in cageNos)
+                    {
+                        if (dWallBeam.panelCageNo.Contains(cageNo))
+                        {
+                            listShowPanel.Add(dWallBeam);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            #endregion
+
+            #region Horizontal Dim
+            PointList pointListDimP = new PointList()
+                {
+                    new TSG.Point(sectionView.RestrictionBox.MinPoint.X, sectionView.RestrictionBox.MinPoint.Y, 0),
+                    new TSG.Point(sectionView.RestrictionBox.MaxPoint.X, sectionView.RestrictionBox.MinPoint.Y, 0)
+                };
+            sdsh.CreateDimensionSet(sectionView, pointListDimP, vY, -800, StraightDimAttributeP2);
+            sectionView.Modify();
+            #endregion
+
+            #region Neighbor Connect
+            #region Left
+            string farFaceString = "SOIL FACE";
+            if (farFaceString != "")
+            {
+                #region Arrow Line
+                TSG.Point firstPoint = new TSG.Point(sectionView.RestrictionBox.MinPoint.X - 550, sectionView.RestrictionBox.MinPoint.Y - 1450, 0);
+                TSG.Point secondPoint = new TSG.Point(sectionView.RestrictionBox.MinPoint.X - 2150, sectionView.RestrictionBox.MinPoint.Y - 1450, 0);
+                TSD.Line line = new TSD.Line(sectionView, firstPoint, secondPoint, new TSD.Line.LineAttributes("Panel-Arrow"));
+                line.Insert();
+                #endregion
+
+                #region Panel Text
+                TSG.Point insertPoint = firstPoint - vX * 500 + vY * 20;
+                Text text = new Text(sectionView, insertPoint, farFaceString, new TextAttributes("CENTER-TEXT"));
+                text.Insert();
+                #endregion
+            }
+            #endregion
+
+            #region Right
+            string nearFaceString = "EXCAVATION FACE";
+            if (nearFaceString != "")
+            {
+                #region Arrow Line
+                TSG.Point firstPoint = new TSG.Point(sectionView.RestrictionBox.MaxPoint.X + 550, sectionView.RestrictionBox.MinPoint.Y - 1450, 0);
+                TSG.Point secondPoint = new TSG.Point(sectionView.RestrictionBox.MaxPoint.X + 2150, sectionView.RestrictionBox.MinPoint.Y - 1450, 0);
+                TSD.Line line = new TSD.Line(sectionView, firstPoint, secondPoint, new TSD.Line.LineAttributes("Panel-Arrow"));
+                line.Insert();
+                #endregion
+
+                #region Panel Text
+                TSG.Point insertPoint = firstPoint + vX * 500 + vY * 20;
+                Text text = new Text(sectionView, insertPoint, nearFaceString, new TextAttributes("CENTER-TEXT"));
+                text.Insert();
+                #endregion
+            }
+            #endregion
+
+            #region Slab Connect
+            if (listSlabs.Count() != 0)
+            {
+                foreach (TSM.Part slab in listSlabs)
+                {
+                    #region Slab Line
+                    Solid solid = slab.GetSolid();
+                    double YMax = solid.MaximumPoint.Y;
+                    double YMin = solid.MinimumPoint.Y;
+
+                    #region Slab at Right
+                    if (solid.MaximumPoint.X > sectionView.RestrictionBox.MaxPoint.X)
+                    {
+                        #region Slab Line
+                        TSG.Point topLineStart = new TSG.Point(sectionView.RestrictionBox.MaxPoint.X, YMax, 0);
+                        TSG.Point topLineEnd = topLineStart + vX * 3000;
+                        TSG.Point botLineStart = new TSG.Point(sectionView.RestrictionBox.MaxPoint.X, YMin, 0);
+                        TSG.Point botLineEnd = botLineStart + vX * 3000;
+
+                        new TSD.Line(sectionView, topLineStart, topLineEnd, new LineAttributes("DWall-SlabLine")).Insert();
+                        new TSD.Line(sectionView, botLineStart, botLineEnd, new LineAttributes("DWall-SlabLine")).Insert();
+                        #endregion
+
+                        #region Break Line
+                        TSG.Point point1 = topLineEnd + vY * 120;
+                        TSG.Point point2 = new TSG.Point(point1.X, (YMax + YMin) / 2 + 100, 0);
+                        TSG.Point point3 = new TSG.Point(point1.X - 200, (YMax + YMin) / 2 + 50, 0);
+                        TSG.Point point4 = new TSG.Point(point1.X + 200, (YMax + YMin) / 2 - 50, 0);
+                        TSG.Point point5 = new TSG.Point(point1.X, (YMax + YMin) / 2 - 100, 0);
+                        TSG.Point point6 = botLineEnd - vY * 120;
+
+                        new TSD.Line(sectionView, point1, point2, new LineAttributes("DWall-BreakLine")).Insert();
+                        new TSD.Line(sectionView, point2, point3, new LineAttributes("DWall-BreakLine")).Insert();
+                        new TSD.Line(sectionView, point3, point4, new LineAttributes("DWall-BreakLine")).Insert();
+                        new TSD.Line(sectionView, point4, point5, new LineAttributes("DWall-BreakLine")).Insert();
+                        new TSD.Line(sectionView, point5, point6, new LineAttributes("DWall-BreakLine")).Insert();
+                        #endregion
+
+                        #region Vertical Dim
+                        PointList pointList = new PointList()
+                        {
+                            topLineEnd,
+                            botLineEnd
+                        };
+                        sdsh.CreateDimensionSet(sectionView, pointList, vX, 300, StraightDimAttribute);
+                        sectionView.Modify();
+                        #endregion
+
+                        #region Lever Mark
+                        CreateValueLevelMark(sectionView, new TSG.Point(topLineEnd.X + 400, topLineEnd.Y, 0), vY, slab.Name + " SLAB");
+                        #endregion
+                    }
+                    #endregion
+
+                    #region Slab at Left
+                    if (solid.MinimumPoint.X < sectionView.RestrictionBox.MinPoint.X)
+                    {
+                        #region Slab Line
+                        TSG.Point topLineStart = new TSG.Point(sectionView.RestrictionBox.MinPoint.X, YMax, 0);
+                        TSG.Point topLineEnd = topLineStart - vX * 1500;
+                        TSG.Point botLineStart = new TSG.Point(sectionView.RestrictionBox.MinPoint.X, YMin, 0);
+                        TSG.Point botLineEnd = botLineStart - vX * 1500;
+
+                        new TSD.Line(sectionView, topLineStart, topLineEnd, new LineAttributes("DWall-SlabLine")).Insert();
+                        new TSD.Line(sectionView, botLineStart, botLineEnd, new LineAttributes("DWall-SlabLine")).Insert();
+                        #endregion
+
+                        #region Break Line
+                        TSG.Point point1 = topLineEnd + vY * 120;
+                        TSG.Point point2 = new TSG.Point(point1.X, (YMax + YMin) / 2 + 100, 0);
+                        TSG.Point point3 = new TSG.Point(point1.X - 200, (YMax + YMin) / 2 + 50, 0);
+                        TSG.Point point4 = new TSG.Point(point1.X + 200, (YMax + YMin) / 2 - 50, 0);
+                        TSG.Point point5 = new TSG.Point(point1.X, (YMax + YMin) / 2 - 100, 0);
+                        TSG.Point point6 = botLineEnd - vY * 120;
+
+                        new TSD.Line(sectionView, point1, point2, new LineAttributes("DWall-BreakLine")).Insert();
+                        new TSD.Line(sectionView, point2, point3, new LineAttributes("DWall-BreakLine")).Insert();
+                        new TSD.Line(sectionView, point3, point4, new LineAttributes("DWall-BreakLine")).Insert();
+                        new TSD.Line(sectionView, point4, point5, new LineAttributes("DWall-BreakLine")).Insert();
+                        new TSD.Line(sectionView, point5, point6, new LineAttributes("DWall-BreakLine")).Insert();
+                        #endregion
+
+                        #region Vertical Dim
+                        PointList pointList = new PointList()
+                        {
+                            topLineEnd,
+                            botLineEnd
+                        };
+                        sdsh.CreateDimensionSet(sectionView, pointList, vX, -500, StraightDimAttribute);
+                        sectionView.Modify();
+                        #endregion
+
+                        #region Lever Mark
+                        CreateValueLevelMark(sectionView, new TSG.Point(topLineEnd.X - 400, topLineEnd.Y, 0), vY, slab.Name + " SLAB");
+                        #endregion
+                    }
+                    #endregion
+                    #endregion
+                }
+            }
+            #endregion
+
+            #region Break Line
+            if (!isContainTop)
+            {
+                TSG.Point point1 = new TSG.Point(sectionView.RestrictionBox.MinPoint.X - 120, sectionView.RestrictionBox.MaxPoint.Y, 0);
+                TSG.Point point2 = new TSG.Point((sectionView.RestrictionBox.MinPoint.X + sectionView.RestrictionBox.MaxPoint.X) / 2 - 100, point1.Y, 0);
+                TSG.Point point3 = new TSG.Point((sectionView.RestrictionBox.MinPoint.X + sectionView.RestrictionBox.MaxPoint.X) / 2 - 50, point1.Y - 200, 0);
+                TSG.Point point4 = new TSG.Point((sectionView.RestrictionBox.MinPoint.X + sectionView.RestrictionBox.MaxPoint.X) / 2 + 50, point1.Y + 200, 0);
+                TSG.Point point5 = new TSG.Point((sectionView.RestrictionBox.MinPoint.X + sectionView.RestrictionBox.MaxPoint.X) / 2 + 100, point1.Y, 0);
+                TSG.Point point6 = new TSG.Point(sectionView.RestrictionBox.MaxPoint.X + 120, sectionView.RestrictionBox.MaxPoint.Y, 0);
+
+                new TSD.Line(sectionView, point1, point2, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(sectionView, point2, point3, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(sectionView, point3, point4, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(sectionView, point4, point5, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(sectionView, point5, point6, new LineAttributes("DWall-BreakLine")).Insert();
+            }
+
+            if (!isContainBot)
+            {
+                TSG.Point point1 = new TSG.Point(sectionView.RestrictionBox.MinPoint.X - 120, sectionView.RestrictionBox.MinPoint.Y, 0);
+                TSG.Point point2 = new TSG.Point((sectionView.RestrictionBox.MinPoint.X + sectionView.RestrictionBox.MaxPoint.X) / 2 - 100, point1.Y, 0);
+                TSG.Point point3 = new TSG.Point((sectionView.RestrictionBox.MinPoint.X + sectionView.RestrictionBox.MaxPoint.X) / 2 - 50, point1.Y - 200, 0);
+                TSG.Point point4 = new TSG.Point((sectionView.RestrictionBox.MinPoint.X + sectionView.RestrictionBox.MaxPoint.X) / 2 + 50, point1.Y + 200, 0);
+                TSG.Point point5 = new TSG.Point((sectionView.RestrictionBox.MinPoint.X + sectionView.RestrictionBox.MaxPoint.X) / 2 + 100, point1.Y, 0);
+                TSG.Point point6 = new TSG.Point(sectionView.RestrictionBox.MaxPoint.X + 120, sectionView.RestrictionBox.MinPoint.Y, 0);
+
+                new TSD.Line(sectionView, point1, point2, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(sectionView, point2, point3, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(sectionView, point3, point4, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(sectionView, point4, point5, new LineAttributes("DWall-BreakLine")).Insert();
+                new TSD.Line(sectionView, point5, point6, new LineAttributes("DWall-BreakLine")).Insert();
+            }
+            #endregion
+            #endregion
+
+            #region View Name
+            TSG.Point namePoint = new TSG.Point((sectionView.RestrictionBox.MinPoint.X + sectionView.RestrictionBox.MaxPoint.X) / 2, sectionView.RestrictionBox.MinPoint.Y - 2000, 0);
+            new Text(sectionView, namePoint, "SECTION " + sectionView.Name, new TextAttributes("CENTER-UNDERLINE-TEXT")).Insert();
+            TSG.Point scalePoint = namePoint - vY * 400;
+            new Text(sectionView, scalePoint, "SCALE 1:100", new TextAttributes("CENTER-NOTE1-TEXT")).Insert();
+            #endregion
+
+            #region Part Lever Mark
+            #region Bottom Lever
+            if (isContainBot)
+            {
+                CreateValueLevelMark(sectionView, new TSG.Point(levelLeftXValue, sectionView.RestrictionBox.MinPoint.Y, 0), new TSG.Vector(0, -1, 0), "TENTATIVE TOE LEVEL");
+            }
+            #endregion
+
+            #region Top Lever
+            if (isContainTop)
+            {
+                double maxYValue = double.MinValue;
+                foreach (DWallBeam dWallBeam in listShowPanel)
+                {
+                    Solid solid = dWallBeam.panelModel.GetSolid();
+                    if (solid.MaximumPoint.Y > maxYValue)
+                    {
+                        maxYValue = solid.MaximumPoint.Y;
+                    }
+                }
+                CreateValueLevelMark(sectionView, new TSG.Point((sectionView.RestrictionBox.MinPoint.X + sectionView.RestrictionBox.MaxPoint.X) / 2 - 50, maxYValue, 0), vY, "CONCRETE CUT-OFF");
+            }
+            #endregion
+            #endregion
+
+            #region Get Reinforcement
+            DrawingObjectEnumerator reinforcements = sectionView.GetAllObjects(typeof(TSD.ReinforcementBase));
+            List<DWallRebar> farFaceRebars = new List<DWallRebar>();
+            List<DWallRebar> nearFaceRebars = new List<DWallRebar>();
+            while (reinforcements.MoveNext())
+            {
+                if (reinforcements.Current is TSD.ReinforcementBase rebar)
+                {
+                    DWallRebar dWallRebar = new DWallRebar(model, rebar);
+                    if (dWallRebar.cageName == cageName)
+                    {
+                        if (dWallRebar.rebarName == "Main Bar FF")
+                        {
+                            dWallRebar.rebarModel.Select();
+                            Solid solid = dWallRebar.rebarModel.GetSolid();
+                            dWallRebar.topRebarPoint = new TSG.Point(solid.MaximumPoint.X, solid.MaximumPoint.Y, solid.MaximumPoint.Z);
+                            dWallRebar.botRebarPoint = new TSG.Point(solid.MinimumPoint.X, solid.MinimumPoint.Y, solid.MinimumPoint.Z);
+                            farFaceRebars.Add(dWallRebar);
+                        }
+                        else if (dWallRebar.rebarName == "Main Bar NF")
+                        {
+                            dWallRebar.rebarModel.Select();
+                            Solid solid = dWallRebar.rebarModel.GetSolid();
+                            dWallRebar.topRebarPoint = new TSG.Point(solid.MaximumPoint.X, solid.MaximumPoint.Y, solid.MaximumPoint.Z);
+                            dWallRebar.botRebarPoint = new TSG.Point(solid.MinimumPoint.X, solid.MinimumPoint.Y, solid.MinimumPoint.Z);
+                            nearFaceRebars.Add(dWallRebar);
+                        }
+                    }
+                }
+            }
+            if (farFaceRebars.Count != 0)
+            {
+                farFaceRebars = farFaceRebars.OrderByDescending(x => x.topRebarPoint.Y).ThenBy(x => x.botRebarPoint.Y).ToList();
+            }
+            if (nearFaceRebars.Count != 0)
+            {
+                nearFaceRebars = nearFaceRebars.OrderByDescending(x => x.topRebarPoint.Y).ThenBy(x => x.botRebarPoint.Y).ToList();
+            }
+            #endregion
+
+            #region Reinforcement Level Mark
+            CreateRebarLevelMark(sectionView, farFaceRebars, levelLeftXValue, isContainTop, isContainBot);
+            CreateRebarLevelMark(sectionView, nearFaceRebars, levelRightXValue, isContainTop ,isContainBot);
+            #endregion
+
+            #region Rotate 90 view
+            sectionView.Modify();
+            sectionView.RotateViewOnDrawingPlane(90);
+            sectionView.Select();
+            model.GetWorkPlaneHandler().SetCurrentTransformationPlane(new TransformationPlane());
+            model.GetWorkPlaneHandler().SetCurrentTransformationPlane(GetTransformationPlane(sectionView));
+            sectionView.Select();
+            #endregion
         }
     }
 }
