@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TEP Version="2.0">
+
+	<Product Id="IntraforDrawing" UpgradeCode="f3572a12-596e-428a-a743-a64004be2061" Version="1.0" Language="1033"
+		Name="IntraforDrawing" Manufacturer="Danggt@iCEBsolutions.com"  Description= "This extension can create panel drawing."
+		IconPath="%TEPDEFINITIONFILEFOLDER%\Intrafor Drawing.bmp" Type="Extension">
+		<TeklaVersions>
+      <TeklaVersion Name="2024.0"/>
+      <MinTeklaVersion Name="2023.0"/>
+      <MaxTeklaVersion Name="2024.1"/>
+		</TeklaVersions>
+	</Product>
+	 
+	<SourcePathVariables>
+		<SourcePathVariable Id="TepOutputFolder" Value="%TEPDEFINITIONFILEFOLDER%"/>
+		<SourcePathVariable Id="BinariesFolder" Value="%TEPDEFINITIONFILEFOLDER%"/>
+		<SourcePathVariable Id="StandardFileFolder" Value="%TEPDEFINITIONFILEFOLDER%"/>
+		<SourcePathVariable Id="MessagesFolder" Value="%TEPDEFINITIONFILEFOLDER%"/>
+		<SourcePathVariable Id="BitmapsFolder" Value="%TEPDEFINITIONFILEFOLDER%"/>
+    </SourcePathVariables>
+
+	<TargetPathVariables>
+		<PathVariable Id="ModelPluginsDirectory" Value="%ENVDIR%\extensions\plugins\tekla\model\"/>
+		<PathVariable Id="ModelApplicationsDirectory" Value="%ENVDIR%\extensions\applications\tekla\model\"/>
+		<PathVariable Id="ExtensionsDir" Value="%commonEnvFolder%\extensions\"/>
+		<PathVariable Id="BinariesTargetDirectory" Value="%ExtensionsDir%\MTR\"/>
+		<PathVariable Id="BitmapsDirectory" Value="%ENVDIR%\..\bitmaps\"/>
+		<PathVariable Id="AttributeFileDirectory" Value="%commonEnvFolder%\system\"/>
+		<PathVariable Id="CommonMacroDirectory" Value="%commonEnvFolder%\macros\modeling\"/>
+		<PathVariable Id="CommonMacroDirectoryDr" Value="%commonEnvFolder%\macros\drawings\"/>
+    		<PathVariable Id="CustomRibbonDirectory" Value="%commonEnvFolder%\system\Ribbons\CustomTabs\Modeling\"/>
+	</TargetPathVariables>
+
+	<Component Id="TheExtensionComponent" Guid="785ec600-0fea-4663-b65c-d40187016e81">
+		<File Id="Intrafor Drawing.bmp" Source="%BinariesFolder%\Intrafor Drawing.bmp" Target="%CommonMacroDirectory%"/>
+		<File Id="Intrafor Drawing.cs" Source="%BinariesFolder%\Intrafor Drawing.cs" Target="%CommonMacroDirectory%"/>
+
+		<File Id="IntraforDrawing.exe" Source="%BinariesFolder%\IntraforDrawing.exe" Target="%BinariesTargetDirectory%"/>
+
+		<File Id="Akit5.dll" Source="%BinariesFolder%\Akit5.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="LibTessDotNet.dll" Source="%BinariesFolder%\LibTessDotNet.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="MaterialDesignColors.dll" Source="%BinariesFolder%\MaterialDesignColors.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="MaterialDesignThemes.Wpf.dll" Source="%BinariesFolder%\MaterialDesignThemes.Wpf.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="Microsoft.Xaml.Behaviors.dll" Source="%BinariesFolder%\Microsoft.Xaml.Behaviors.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="Mono.Cecil.dll" Source="%BinariesFolder%\Mono.Cecil.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="Mono.Cecil.Mdb.dll" Source="%BinariesFolder%\Mono.Cecil.Mdb.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="Mono.Cecil.Pdb.dll" Source="%BinariesFolder%\Mono.Cecil.Pdb.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="Mono.Cecil.Rocks.dll" Source="%BinariesFolder%\Mono.Cecil.Rocks.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="MoreLinq.dll" Source="%BinariesFolder%\MoreLinq.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="Newtonsoft.Json.dll" Source="%BinariesFolder%\Newtonsoft.Json.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="System.Buffers.dll" Source="%BinariesFolder%\System.Buffers.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="System.Memory.dll" Source="%BinariesFolder%\System.Memory.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="System.Numerics.Vectors.dll" Source="%BinariesFolder%\System.Numerics.Vectors.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="System.Runtime.CompilerServices.Unsafe.dll" Source="%BinariesFolder%\System.Runtime.CompilerServices.Unsafe.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="Trimble.Remoting.dll" Source="%BinariesFolder%\Trimble.Remoting.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="Trimble.Technology.MsgLib.dll" Source="%BinariesFolder%\Trimble.Technology.MsgLib.dll" Target="%BinariesTargetDirectory%"/>
+		<File Id="Trimble.Technology.Rkit.dll" Source="%BinariesFolder%\Trimble.Technology.Rkit.dll" Target="%BinariesTargetDirectory%"/>
+	</Component>
+
+	<Feature Id="TheExtensionFeature" Title="ExtensionFeature">
+		<ComponentRef ReferenceId="TheExtensionComponent" />
+	</Feature>
+
+ </TEP>

@@ -7,13 +7,14 @@
                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                            xmlns:tsd="clr-namespace:Tekla.Structures.Dialog;assembly=Tekla.Structures.Dialog"
                            xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                           Title="INTRAFOR DRAWING v1.0"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
                            Margin="0"
                            mc:Ignorable="d"
                            VerticalContentAlignment="Center"
                            HorizontalContentAlignment="Center"
-                           MinWidth="800">
+                           MinWidth="700" Icon="/ts-ext.ico">
     <d:UserControl.DataContext>
         <local:MainWindowViewModel />
     </d:UserControl.DataContext>
@@ -183,7 +184,7 @@
                 <Setter Property="VerticalContentAlignment"
                         Value="Center" />
                 <Setter Property="MinWidth"
-                        Value="100" />
+                        Value="150" />
                 <Setter Property="Height"
                         Value="auto" />
                 <Setter Property="Margin"
@@ -301,7 +302,7 @@
                               Margin="5,2,5,2">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -357,22 +358,14 @@
                                 <TextBox Height="23"
                                      Width="170"
                                      Text="{Binding AT_Tilte_1, Mode=TwoWay}" />
-                                <Button Content="Get Sections By Panel"
-                                    Width="150"
-                                    Height="23"
-                                    Command="{Binding Suggest_Section}"></Button>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal"
                                         Margin="0 0 0 5">
                                 <UIControls:WpfFilterCheckBox AttributeName="AT_Max_Length"
-                      Content="Max Panel Height Show in Drawing:" />
+                                                              Content="Max Panel Height Show in Drawing:" />
                                 <TextBox Height="23"
- Width="80"
- Text="{Binding AT_Max_Length, Mode=TwoWay}" />
-                                <Button Content="Modify Panel Drawings"
-                                    Width="150"
-                                    Height="23"
-                                    Command="{Binding Modify_Drawing}"></Button>
+                                         Width="80"
+                                         Text="{Binding AT_Max_Length, Mode=TwoWay}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal"
                                         Margin="0 0 0 0">
@@ -380,10 +373,10 @@
                                     Width="170"
                                     Height="23"
                                     Command="{Binding Create_Drawings}"></Button>
-                                <Button Content="Get Exist Drawings By Panel"
+                                <!--<Button Content="Get Exist Drawings By Panel"
                                     Width="180"
                                     Height="23"
-                                    Command="{Binding Get_Exist_Drawings}"></Button>
+                                    Command="{Binding Get_Exist_Drawings}"></Button>-->
                                 <Button Content="Create Reports (BBS)"
                                     Height="23"
                                     Width="140"
@@ -398,6 +391,7 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
                         </Grid.RowDefinitions>
                         <DataGrid Grid.Row="0"
                                   x:Name="DtG_HorizontalSection"
@@ -430,11 +424,11 @@
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Panel}"
+                                <DataGridTextColumn Binding="{Binding Name}"
                                                     HeaderStyle="{StaticResource HorizontalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
                                                     CellStyle="{StaticResource Silver}"
-                                                    Header="Panel" />
+                                                    Header="Name" />
 
                                 <DataGridTextColumn Binding="{Binding Level,StringFormat=N3}"
                                                     HeaderStyle="{StaticResource HorizontalHeaderStyle}"
@@ -443,6 +437,17 @@
                                                     Header="Level" />
                             </DataGrid.Columns>
                         </DataGrid>
+                        <StackPanel Grid.Row="1"
+                                    Orientation="Horizontal">
+                            <Button Content="Get Sections By Panel"
+                                    Width="150"
+                                    Height="23"
+                                    Command="{Binding Suggest_Section}"></Button>
+                            <Button Content="Modify Panel Drawings"
+                                    Width="150"
+                                    Height="23"
+                                    Command="{Binding Modify_Drawing}"></Button>
+                        </StackPanel>
                     </Grid>
                 </GroupBox>
             </Grid>

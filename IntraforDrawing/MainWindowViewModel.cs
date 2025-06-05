@@ -124,7 +124,7 @@ namespace IntraforDrawing
                             // Ánh xạ cột với thuộc tính trong đối tượng
                             switch (targetColumn)
                             {
-                                case 0: _HorizontalSectionsIP.Panel = cells[j]; break;
+                                case 0: _HorizontalSectionsIP.Name = cells[j]; break;
                                 case 1: _HorizontalSectionsIP.Level = cells[j]; break;
                             }
                         }
@@ -168,7 +168,133 @@ namespace IntraforDrawing
                             int drawingSheetNumber = 1;
                             List<string> listSplit = new List<string>();
                             List<string> containCage = new List<string>();
-                            int numberOfFronDrawing = NumberOfFrontDrawing(listPanel, out listSplit, out containCage);
+                            int numberOfFrontDrawing = NumberOfFrontDrawing(listPanel, out listSplit, out containCage);
+                            List<HorizontalSectionIP> listHorizontalSection = GetHorizontalSection(listPanel);
+
+                            for (int i = 0; i < listHorizontalSection.Count; i++)
+                            {
+                                switch (i)
+                                {
+                                    case 0:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(118, 158, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing));
+                                        break;
+                                    case 1:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(313, 158, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing));
+                                        break;
+                                    case 2:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(118, 84, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing));
+                                        break;
+                                    case 3:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(313, 84, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing));
+                                        break;
+                                    case 4:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(118, 247, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 1));
+                                        break;
+                                    case 5:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(313, 247, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 1));
+                                        break;
+                                    case 6:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(118, 164, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 1));
+                                        break;
+                                    case 7:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(313, 164, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 1));
+                                        break;
+                                    case 8:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(118, 81, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 1));
+                                        break;
+                                    case 9:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(313, 81, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 1));
+                                        break;
+                                    case 10:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(118, 247, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 2));
+                                        break;
+                                    case 11:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(313, 247, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 2));
+                                        break;
+                                    case 12:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(118, 164, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 2));
+                                        break;
+                                    case 13:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(313, 164, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 2));
+                                        break;
+                                    case 14:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(118, 81, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 2));
+                                        break;
+                                    case 15:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(313, 81, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 2));
+                                        break;
+                                    case 16:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(118, 247, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 3));
+                                        break;
+                                    case 17:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(313, 247, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 3));
+                                        break;
+                                    case 18:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(118, 164, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 3));
+                                        break;
+                                    case 19:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(313, 164, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 3));
+                                        break;
+                                    case 20:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(118, 81, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 3));
+                                        break;
+                                    case 21:
+                                        listHorizontalSection[i].InsertPoint = new TSG.Point(313, 81, 0);
+                                        listHorizontalSection[i].SentToDrawingName = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + 3));
+                                        break;
+                                }
+                            }
+
+                            int numberOfSectionDrawing = 0;
+                            switch (listHorizontalSection.Count)
+                            {
+                                case int n when (n <= 4):
+                                    numberOfSectionDrawing = 1;
+                                    break;
+                                case int n when (n > 4 && n <= 10):
+                                    numberOfSectionDrawing = 2;
+                                    break;
+                                case int n when (n > 10 && n <= 16):
+                                    numberOfSectionDrawing = 3;
+                                    break;
+                                case int n when (n > 16 && n <= 22):
+                                    numberOfSectionDrawing = 4;
+                                    break;
+                            }
+
+                            List<CastUnitDrawing> listSectionDrawing = new List<CastUnitDrawing>();
+                            for (int i = 0; i < numberOfSectionDrawing; i++)
+                            {
+                                CastUnitDrawing sectionView = new CastUnitDrawing(assembly.Identifier, drawingSheetNumber + numberOfFrontDrawing + i, "CIP_Wall");
+                                sectionView.Layout.LoadAttributes("DWALL");
+                                sectionView.Name = GetNameFromTitle(IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + i));
+                                sectionView.Title1 = IncrementLastSegmentByNumber(titel1, numberOfFrontDrawing + i);
+                                sectionView.Title2 = assembly.Name;
+                                sectionView.Insert();
+                                listSectionDrawing.Add(sectionView);
+                                ClearViews(ref sectionView);
+                            }
 
                             foreach (string cage in containCage)
                             {
@@ -177,14 +303,14 @@ namespace IntraforDrawing
                                     // Full in 1 drawing
                                     CastUnitDrawing frontCage = new CastUnitDrawing(assembly.Identifier, drawingSheetNumber, "CIP_Wall");
                                     frontCage.Layout.LoadAttributes("DWALL");
-                                    frontCage.Name = assembly.Name;
+                                    frontCage.Name = GetNameFromTitle(titel1);
                                     frontCage.Title1 = titel1;
-                                    frontCage.SetUserProperty("COMMENT", "Front View");
+                                    frontCage.Title2 = assembly.Name;
                                     frontCage.Insert();
 
                                     drawingSheetNumber++;
                                     titel1 = IncrementLastSegment(titel1);
-                                    FrontViewDrawing(ref frontCage, listPanel, cage, listSplit[0], true, true);
+                                    FrontViewDrawing(ref frontCage, listPanel, cage, listSplit[0], listHorizontalSection, true, true);
                                 }
                                 else
                                 {
@@ -192,44 +318,50 @@ namespace IntraforDrawing
                                     {
                                         CastUnitDrawing frontCage = new CastUnitDrawing(assembly.Identifier, drawingSheetNumber, "CIP_Wall");
                                         frontCage.Layout.LoadAttributes("DWALL");
-                                        frontCage.Name = assembly.Name;
+                                        frontCage.Name = GetNameFromTitle(titel1);
                                         frontCage.Title1 = titel1;
-                                        frontCage.SetUserProperty("COMMENT", "Front View");
+                                        frontCage.Title2 = assembly.Name;
                                         frontCage.Insert();
 
                                         drawingSheetNumber++;
                                         titel1 = IncrementLastSegment(titel1);
                                         if (i == 0)
                                         {
-                                            FrontViewDrawing(ref frontCage, listPanel, cage, listSplit[i], true, false);
+                                            FrontViewDrawing(ref frontCage, listPanel, cage, listSplit[i], listHorizontalSection, true, false);
                                             // First drawing
                                         }
                                         else if (i == listSplit.Count - 1)
                                         {
-                                            FrontViewDrawing(ref frontCage, listPanel, cage, listSplit[i], false, true);
+                                            FrontViewDrawing(ref frontCage, listPanel, cage, listSplit[i], listHorizontalSection, false, true);
                                             // Middle drawing
                                         }
                                         else
                                         {
-                                            FrontViewDrawing(ref frontCage, listPanel, cage, listSplit[i], false, false);
+                                            FrontViewDrawing(ref frontCage, listPanel, cage, listSplit[i], listHorizontalSection, false, false);
                                             // Last drawing
                                         }
                                     }
                                 }
                             }
 
+                            for (int i = 0; i < listSectionDrawing.Count; i++)
+                            {
+                                if (i == 0)
+                                {
+
+                                }
+                                else
+                                {
+
+                                }
+                                drawingSheetNumber++;
+                                titel1 = IncrementLastSegment(titel1);
+                            }
+
                             DrawingIP newIP = new DrawingIP(assembly.Name, drawingSheetNumber - 1);
                             DrawingsIP.Add(newIP);
                         }
                     }
-                }
-            );
-
-            Get_Exist_Drawings = new RelayCommand<object>(
-                (p) => true,
-                (p) =>
-                {
-
                 }
             );
 
@@ -286,7 +418,7 @@ namespace IntraforDrawing
                 return hash;
             }
         }
-        string IncrementLastSegment(string input)
+        private string IncrementLastSegment(string input)
         {
             var parts = input.Split('/');
             int lastIndex = parts.Length - 1;
@@ -303,6 +435,32 @@ namespace IntraforDrawing
             {
                 throw new ArgumentException("The last segment is not a valid number.");
             }
+        }
+        private string IncrementLastSegmentByNumber(string input, int numberIncrease)
+        {
+            var parts = input.Split('/');
+            int lastIndex = parts.Length - 1;
+            string lastPart = parts[lastIndex];
+
+            int number;
+            if (int.TryParse(lastPart, out number))
+            {
+                number += numberIncrease;
+                parts[lastIndex] = number.ToString("D" + lastPart.Length); // Preserve leading zeros
+                return string.Join("/", parts);
+            }
+            else
+            {
+                throw new ArgumentException("The last segment is not a valid number.");
+            }
+        }
+        private string GetNameFromTitle(string input)
+        {
+            var parts = input.Split('/');
+            int lastIndex = parts.Length - 1;
+            string lastPart = parts[lastIndex];
+            string nearLast = parts[lastIndex - 1];
+            return nearLast + "/" + lastPart;
         }
         private TransformationPlane GetTransformationPlane(TSD.View view)
         {
@@ -733,7 +891,79 @@ namespace IntraforDrawing
 
             return numberOfDrawing;
         }
-        private void FrontViewDrawing(ref CastUnitDrawing drawing, List<TSM.Part> listPanel, string cageName, string listSplit, bool isContainTop, bool isContainBot)
+        private List<HorizontalSectionIP> GetHorizontalSection(List<TSM.Part> listPanels)
+        {
+            List<HorizontalSectionIP> horizontalSections = new List<HorizontalSectionIP>();
+
+            List<DWallBeam> dWallList = new List<DWallBeam>();
+            foreach (TSM.Part panel in listPanels)
+            {
+                DWallBeam dWallPanel = new DWallBeam(panel);
+                dWallList.Add(dWallPanel);
+            }
+
+            List<List<DWallBeam>> dWallListByCageContain = dWallList.GroupBy(b => b.cageContainNote)
+                                                                    .Select(g => g.ToList())
+                                                                    .ToList();
+
+            foreach (List<DWallBeam> listDWallBeam in dWallListByCageContain)
+            {
+                List<DWallBeam> orderListDWallBeam = listDWallBeam.OrderBy(x => x.panelCageNo).ToList();
+                foreach (DWallBeam dWallBeam in orderListDWallBeam)
+                {
+                    dWallBeam.SetMaxMinPointByZ();
+                }
+
+                int sectionName = 2;
+                for (int i = 0; i < orderListDWallBeam.Count; i++)
+                {
+                    if (i != 0)
+                    {
+                        // Create Section on Top
+                        TSG.Point topPoint = orderListDWallBeam[i].maxPoint;
+                        TSG.Point botPoint = orderListDWallBeam[i - 1].minPoint;
+                        double cutLevel = Math.Round((topPoint.Z + botPoint.Z) / 2, 3);
+                        HorizontalSectionIP sectionIP = new HorizontalSectionIP(sectionName.ToString(), cutLevel.ToString());
+                        sectionIP.CageNo = orderListDWallBeam[i - 1].panelCageNo[0].ToString();
+                        sectionIP.ValueFromTopCage = orderListDWallBeam[i - 1].maxPoint.Z - cutLevel;
+                        horizontalSections.Add(sectionIP);
+                        sectionName++;
+                    }
+                    // Section at Mid
+                    TSG.Point topDWallPoint = orderListDWallBeam[i].maxPoint;
+                    TSG.Point botDWallPoint = orderListDWallBeam[i].minPoint;
+                    double midCutLevel = Math.Round(topDWallPoint.Z + (botDWallPoint.Z - topDWallPoint.Z) / 3, 3);
+                    HorizontalSectionIP midSectionIP = new HorizontalSectionIP(sectionName.ToString(), midCutLevel.ToString());
+                    midSectionIP.CageNo = orderListDWallBeam[i].panelCageNo[0].ToString();
+                    midSectionIP.ValueFromTopCage = orderListDWallBeam[i].maxPoint.Z - midCutLevel;
+                    horizontalSections.Add(midSectionIP);
+                    sectionName++;
+                }
+            }
+
+            return horizontalSections;
+        }
+        private void ClearViews(ref CastUnitDrawing drawing)
+        {
+            DrawingHandler dh = new DrawingHandler();
+            if (dh.GetConnectionStatus())
+            {
+                dh.SetActiveDrawing(drawing);
+
+                #region Clear View
+                DrawingObjectEnumerator views = drawing.GetSheet().GetAllObjects(typeof(TSD.View));
+                while (views.MoveNext())
+                {
+                    if (views.Current is TSD.View view)
+                    {
+                        view.Delete();
+                    }
+                    dh.CloseActiveDrawing(true);
+                }
+                #endregion
+            }
+        }
+        private void FrontViewDrawing(ref CastUnitDrawing drawing, List<TSM.Part> listPanel, string cageName, string listSplit, List<HorizontalSectionIP> listHorizontalSection, bool isContainTop, bool isContainBot)
         {
             DrawingHandler dh = new DrawingHandler();
             if (dh.GetConnectionStatus())
@@ -762,6 +992,21 @@ namespace IntraforDrawing
                                 listShowPanel.Add(dWallBeam);
                                 break;
                             }
+                        }
+                    }
+                }
+                #endregion
+
+                #region Get List Horizontal Section
+                List<HorizontalSectionIP> listShowHorizontalSection = new List<HorizontalSectionIP>();
+                foreach (HorizontalSectionIP horizontalSection in listHorizontalSection)
+                {
+                    foreach (string cageNo in cageNos)
+                    {
+                        if (horizontalSection.CageNo == cageNo)
+                        {
+                            listShowHorizontalSection.Add(horizontalSection);
+                            break;
                         }
                     }
                 }
@@ -870,12 +1115,12 @@ namespace IntraforDrawing
                 frontView.Modify();
                 #endregion
 
-                EditFrontView(frontView, listPanel, cageName, listSplit, isContainTop, isContainBot);
+                EditFrontView(frontView, listPanel, cageName, listSplit, listShowHorizontalSection, isContainTop, isContainBot);
                 topView.Delete();
                 dh.CloseActiveDrawing(true);
             }
         }
-        private void EditFrontView(TSD.View frontView, List<TSM.Part> listPanel, string cageName, string listSplit, bool isContainTop, bool isContainBot)
+        private void EditFrontView(TSD.View frontView, List<TSM.Part> listPanel, string cageName, string listSplit, List<HorizontalSectionIP> listShowHorizontalSection, bool isContainTop, bool isContainBot)
         {
             model.GetWorkPlaneHandler().SetCurrentTransformationPlane(new TransformationPlane());
             model.GetWorkPlaneHandler().SetCurrentTransformationPlane(GetTransformationPlane(frontView));
@@ -1274,6 +1519,62 @@ namespace IntraforDrawing
                 LevelMark levelTopConcrete = CreateValueLevelMark(frontView, new TSG.Point((frontView.RestrictionBox.MinPoint.X + frontView.RestrictionBox.MaxPoint.X) / 2, maxYValue, 0), vY, "CONCRETE CUT-OFF");
             }
             #endregion
+            #endregion
+
+            #region Create Horizontal View
+            foreach (DWallBeam dWallBeam in listShowPanel)
+            {
+                dWallBeam.SetMaxMinPointByY();
+                TSG.Point topDWallPoint = dWallBeam.maxPoint;
+                foreach (HorizontalSectionIP horizontalSection in listShowHorizontalSection)
+                {
+                    if (dWallBeam.panelCageNo.Contains(horizontalSection.CageNo))
+                    {
+                        double YSectionValue = topDWallPoint.Y - horizontalSection.ValueFromTopCage;
+                        double minXValue = frontView.RestrictionBox.MinPoint.X;
+                        double maxXValue = frontView.RestrictionBox.MaxPoint.X;
+
+                        TSD.View.ViewAttributes sectionAttributes = new TSD.View.ViewAttributes("Section View");
+                        SectionMarkBase.SectionMarkAttributes sectionMarkAttributes = new SectionMarkBase.SectionMarkAttributes("DWall-Section");
+                        if (horizontalSection.isFirstShow)
+                        {
+                            TSD.View.CreateSectionView(frontView, new TSG.Point(maxXValue, YSectionValue, 0), new TSG.Point(minXValue, YSectionValue, 0), horizontalSection.InsertPoint, 500, 0, sectionAttributes, sectionMarkAttributes, out TSD.View section, out SectionMark sectionMark);
+                            Macro.Load_ViewAttribute_Filter_And_EditSetting(section, "Section View");
+
+                            TextElement textName = new TextElement(" " + horizontalSection.Name);
+                            textName.Font = new FontAttributes(DrawingColors.Green, 4, "ISOCPEUR", false, false);
+
+                            section.Attributes.TagsAttributes.TagA1.TagContent.Add(textName);
+                            section.Name = horizontalSection.Name;
+                            section.Modify();
+
+                            sectionMark.Attributes.MarkName = horizontalSection.Name;
+                            sectionMark.Modify();
+
+
+                            Macro.Send_View_To_Other_Drawing(section, horizontalSection.SentToDrawingName, listPanel[0].Name);
+                            horizontalSection.isFirstShow = false;
+                        }
+                        else
+                        {
+                            TSD.View.CreateSectionView(frontView, new TSG.Point(maxXValue, YSectionValue, 0), new TSG.Point(minXValue, YSectionValue, 0), new TSG.Point(-300, -300, 0), 500, 0, sectionAttributes, sectionMarkAttributes, out TSD.View section, out SectionMark sectionMark);
+                            Macro.Load_ViewAttribute_Filter_And_EditSetting(section, "Section View");
+
+                            TextElement textName = new TextElement(" " + horizontalSection.Name);
+                            textName.Font = new FontAttributes(DrawingColors.Green, 4, "ISOCPEUR", false, false);
+
+                            section.Attributes.TagsAttributes.TagA1.TagContent.Add(textName);
+                            section.Name = horizontalSection.Name;
+                            section.Modify();
+
+                            sectionMark.Attributes.MarkName = horizontalSection.Name;
+                            sectionMark.Modify();
+
+                            Macro.Send_View_To_Other_Drawing(section, horizontalSection.SentToDrawingName, listPanel[0].Name);
+                        }
+                    }
+                }
+            }
             #endregion
 
             #region Reinforcement Level Mark

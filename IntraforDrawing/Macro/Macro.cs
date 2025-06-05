@@ -215,5 +215,121 @@ namespace IntraforDrawing
             File.WriteAllText(filename, macros);
             Operation.RunMacro("..\\" + macroName);
         }
+        public static void Send_View_To_Other_Drawing(TSD.View _View, string sentToDrawingName, string panelName)
+        {
+            TSDui.DrawingObjectSelector drObjSelector = dh.GetDrawingObjectSelector();
+            drObjSelector.UnselectAllObjects();
+            drObjSelector.SelectObjects(new ArrayList() { _View }, false);
+
+            #region Get Drawing Index
+            //DrawingHandler dhh = new DrawingHandler();
+            //DrawingEnumerator de = dhh.GetDrawings();
+            //int index = -1;
+
+            //while (de.MoveNext())
+            //{
+            //    index++;
+            //    if (de.Current is CastUnitDrawing castDrawing)
+            //    {
+            //        if (castDrawing.Name == sentToDrawingName)
+            //        {
+            //            break;
+            //        }
+            //    }
+            //}
+
+            //List<CastUnitDrawing> listPanelDrawing = new List<CastUnitDrawing>();
+            //while (de.MoveNext())
+            //{
+            //    if (de.Current is CastUnitDrawing castDrawing)
+            //    {
+            //        if (castDrawing.Title2 == panelName)
+            //        {
+            //            listPanelDrawing.Add(castDrawing);
+            //        }
+            //    }
+            //}
+
+            //listPanelDrawing = listPanelDrawing.OrderBy(x => x.Name).ToList();
+            //for (int i = 0; i < listPanelDrawing.Count; i++)
+            //{
+            //    if (listPanelDrawing[i].Name == sentToDrawingName)
+            //    {
+            //        index = i;
+            //    }
+            //}
+            #endregion
+
+            Search_Panel_Name(sentToDrawingName);
+
+            string macroName = "Send_View_To_Other_Drawing.cs";
+            string macroPath = string.Empty;
+            string dir = string.Empty;
+            TeklaStructuresSettings.GetAdvancedOption("XS_MACRO_DIRECTORY", ref dir);
+            bool XS_Enable_Check = false;
+            TeklaStructuresSettings.GetAdvancedOption("XS_DIALOG_ENABLE_STATE", ref XS_Enable_Check);
+            if (dir != "")
+            {
+                string[] Macro_folder = dir.Split(';');
+                if (Macro_folder.Count() >= 1)
+                {
+                    macroPath = ((!Macro_folder[0].Contains("\\\\")) ? Macro_folder[0] : Macro_folder[0].Replace("\\\\", "\\"));
+                }
+            }
+            string macros =
+                "#pragma reference \"Tekla.Macros.Wpf.Runtime\"\r\n" +
+                "#pragma reference \"Tekla.Macros.Akit\"\r\n" +
+                "#pragma reference \"Tekla.Macros.Runtime\"\r\n" +
+                "namespace UserMacros {\r\n" +
+                "public class Macro {\r\n" +
+                "[Tekla.Macros.Runtime.MacroEntryPointAttribute()]\r\n" +
+                "public static void Run(Tekla.Macros.Runtime.IMacroRuntime runtime) {\r\n" +
+                "Tekla.Macros.Akit.IAkitScriptHost akit = runtime.Get<Tekla.Macros.Akit.IAkitScriptHost>();\r\n" +
+                "Tekla.Macros.Wpf.Runtime.IWpfMacroHost wpf = runtime.Get<Tekla.Macros.Wpf.Runtime.IWpfMacroHost>();\r\n" +
+                "wpf.View(\"DocumentManager.MainWindow\").Find(\"AID_DOCMAN_DataGridControl\").As.DataGrid.NewSelection.With(0).Invoke();\r\n" +
+                "akit.Callback(\"acmdMoveToDrawing\", \"\", \"View_10 window_1\");\r\n" +
+                "akit.PushButton(\"butMoveViewMove\", \"gr_MoveViewToDrawing\");\r\n" +
+                "}\r\n" +
+                "}\r\n" +
+                "}";
+            string filename = Path.Combine(macroPath, macroName);
+            File.WriteAllText(filename, macros);
+            Operation.RunMacro("..\\" + macroName);
+        }
+        public static void Search_Panel_Name(string sentToDrawingName)
+        {
+            string macroName = "Search_Panel_Name.cs";
+            string macroPath = string.Empty;
+            string dir = string.Empty;
+            TeklaStructuresSettings.GetAdvancedOption("XS_MACRO_DIRECTORY", ref dir);
+            bool XS_Enable_Check = false;
+            TeklaStructuresSettings.GetAdvancedOption("XS_DIALOG_ENABLE_STATE", ref XS_Enable_Check);
+            if (dir != "")
+            {
+                string[] Macro_folder = dir.Split(';');
+                if (Macro_folder.Count() >= 1)
+                {
+                    macroPath = ((!Macro_folder[0].Contains("\\\\")) ? Macro_folder[0] : Macro_folder[0].Replace("\\\\", "\\"));
+                }
+            }
+            string macros =
+                "#pragma reference \"Tekla.Macros.Wpf.Runtime\"\r\n" +
+                "#pragma reference \"Tekla.Macros.Akit\"\r\n" +
+                "#pragma reference \"Tekla.Macros.Runtime\"\r\n" +
+                "namespace UserMacros {\r\n" +
+                "public class Macro {\r\n" +
+                "[Tekla.Macros.Runtime.MacroEntryPointAttribute()]\r\n" +
+                "public static void Run(Tekla.Macros.Runtime.IMacroRuntime runtime) {\r\n" +
+                "Tekla.Macros.Wpf.Runtime.IWpfMacroHost wpf = runtime.Get<Tekla.Macros.Wpf.Runtime.IWpfMacroHost>();\r\n" +
+                "wpf.InvokeCommand(\"CommandRepository\", \"Drawing.DrawingList\");\r\n" +
+                "wpf.View(\"DocumentManager.MainWindow\").Find(\"AID_DOCMAN_SearchBox\").As.TextBox.SetText(\"\");\r\n" +
+                "wpf.View(\"DocumentManager.MainWindow\").Find(\"AID_DOCMAN_SearchBox\").As.TextBox.SetText(\"" + sentToDrawingName + "\");\r\n" +
+                "}\r\n" +
+                "}\r\n" +
+                "}";
+            string filename = Path.Combine(macroPath, macroName);
+            File.WriteAllText(filename, macros);
+            Operation.RunMacro("..\\" + macroName);
+        }
     }
 }
