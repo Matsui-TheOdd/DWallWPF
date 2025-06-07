@@ -125,5 +125,27 @@ namespace IntraforDrawing
                 }
             }
         }
+        public void SetMaxMinPointByX()
+        {
+            panelModel.Select();
+            Solid solid = panelModel.GetSolid();
+            maxPoint = solid.MaximumPoint;
+            minPoint = solid.MinimumPoint;
+
+            foreach (DWallRebar dWallRebar in listDWallRebar)
+            {
+                RebarGroup rebarGroup = dWallRebar.rebarModel;
+                Solid rebarSolid = rebarGroup.GetSolid();
+
+                if (maxPoint.X < rebarSolid.MaximumPoint.X)
+                {
+                    maxPoint = rebarSolid.MaximumPoint;
+                }
+                if (minPoint.X > rebarSolid.MinimumPoint.X)
+                {
+                    minPoint = rebarSolid.MinimumPoint;
+                }
+            }
+        }
     }
 }

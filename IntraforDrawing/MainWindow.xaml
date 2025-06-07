@@ -4,6 +4,7 @@
                            xmlns:UIControls="clr-namespace:Tekla.Structures.Dialog.UIControls;assembly=Tekla.Structures.Dialog"
                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                            xmlns:local="clr-namespace:IntraforDrawing"
+                           xmlns:helpers="clr-namespace:IntraforDrawing"
                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                            xmlns:tsd="clr-namespace:Tekla.Structures.Dialog;assembly=Tekla.Structures.Dialog"
                            xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -14,7 +15,9 @@
                            mc:Ignorable="d"
                            VerticalContentAlignment="Center"
                            HorizontalContentAlignment="Center"
-                           MinWidth="700" Icon="/ts-ext.ico">
+                           MinWidth="700" 
+                           MinHeight="600" 
+                           Icon="/ts-ext.ico">
     <d:UserControl.DataContext>
         <local:MainWindowViewModel />
     </d:UserControl.DataContext>
@@ -298,25 +301,25 @@
                                 Padding="0"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Top" />
-        <materialDesign:Card  Grid.Row="1"
-                              Margin="5,2,5,2">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <GroupBox Grid.Column="0"
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="450"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <GroupBox Grid.Column="0"
                           Grid.Row="0"
                           Header="Drawing List">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <DataGrid Grid.Row="0"
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0"
                                   x:Name="DtG_Drawing"
                                   VerticalAlignment="Stretch"
                                   HorizontalAlignment="Stretch"
@@ -328,72 +331,72 @@
                                   Margin="0 0 0 5"
                                   ItemsSource="{Binding DrawingsIP, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                   MinHeight="200">
-                            <DataGrid.RowStyle>
-                                <Style TargetType="DataGridRow">
-                                    <Setter Property="Tag"
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="Tag"
                                             Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
-                                </Style>
-                            </DataGrid.RowStyle>
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Panel}"
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Panel}"
                                                     HeaderStyle="{StaticResource HorizontalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
                                                     CellStyle="{StaticResource Silver}"
                                                     Header="Panel" />
 
-                                <DataGridTextColumn Binding="{Binding NumberOfDrawings}"
+                            <DataGridTextColumn Binding="{Binding NumberOfDrawings}"
                                                     HeaderStyle="{StaticResource HorizontalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
                                                     CellStyle="{StaticResource Moccasin}"
                                                     Header="Number Of Drawings" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <StackPanel Grid.Row="1"
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="1"
                                     Orientation="Vertical"
                                     Margin="0">
-                            <StackPanel Orientation="Horizontal"
+                        <StackPanel Orientation="Horizontal"
                                         Margin="0 0 0 5">
-                                <UIControls:WpfFilterCheckBox AttributeName="AT_Tilte_1"
+                            <UIControls:WpfFilterCheckBox AttributeName="AT_Tilte_1"
                                                           Content="First Drawing Title:" />
-                                <TextBox Height="23"
+                            <TextBox Height="23"
                                      Width="170"
                                      Text="{Binding AT_Tilte_1, Mode=TwoWay}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal"
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
                                         Margin="0 0 0 5">
-                                <UIControls:WpfFilterCheckBox AttributeName="AT_Max_Length"
+                            <UIControls:WpfFilterCheckBox AttributeName="AT_Max_Length"
                                                               Content="Max Panel Height Show in Drawing:" />
-                                <TextBox Height="23"
+                            <TextBox Height="23"
                                          Width="80"
                                          Text="{Binding AT_Max_Length, Mode=TwoWay}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal"
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
                                         Margin="0 0 0 0">
-                                <Button Content="Create Drawings By Panel"
+                            <Button Content="Create Drawings By Panel"
                                     Width="170"
                                     Height="23"
                                     Command="{Binding Create_Drawings}"></Button>
-                                <!--<Button Content="Get Exist Drawings By Panel"
+                            <!--<Button Content="Get Exist Drawings By Panel"
                                     Width="180"
                                     Height="23"
                                     Command="{Binding Get_Exist_Drawings}"></Button>-->
-                                <Button Content="Create Reports (BBS)"
+                            <Button Content="Create Reports (BBS)"
                                     Height="23"
                                     Width="140"
                                     Command="{Binding Create_Reports}"></Button>
-                            </StackPanel>
                         </StackPanel>
-                    </Grid>
-                </GroupBox>
-                <GroupBox Grid.Column="1"
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Column="1"
                           Grid.Row="0"
                           Header="Horizontal Section">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <DataGrid Grid.Row="0"
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0"
                                   x:Name="DtG_HorizontalSection"
                                   VerticalAlignment="Stretch"
                                   HorizontalAlignment="Stretch"
@@ -408,49 +411,58 @@
                                   KeyDown="DtG_HorizontalSection_KeyDown"
                                   SelectedCellsChanged="DtG_HorizontalSection_SelectedCellsChanged"
                                   MinHeight="200">
-                            <DataGrid.RowStyle>
-                                <Style TargetType="DataGridRow">
-                                    <Setter Property="Tag"
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="Tag"
                                             Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
-                                    <Setter Property="ContextMenu">
-                                        <Setter.Value>
-                                            <ContextMenu>
-                                                <MenuItem Header="Delete rows"
+                                <Setter Property="ContextMenu">
+                                    <Setter.Value>
+                                        <ContextMenu>
+                                            <MenuItem Header="Delete rows"
                                                           Command="{Binding PlacementTarget.Tag.DelRow_HorizontalSectionIP_Command, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
-                                                </MenuItem>
-                                            </ContextMenu>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </DataGrid.RowStyle>
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Name}"
+                                            </MenuItem>
+                                        </ContextMenu>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Name}"
                                                     HeaderStyle="{StaticResource HorizontalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
                                                     CellStyle="{StaticResource Silver}"
                                                     Header="Name" />
 
-                                <DataGridTextColumn Binding="{Binding Level,StringFormat=N3}"
+                            <DataGridTextColumn Binding="{Binding Level,StringFormat=N3}"
                                                     HeaderStyle="{StaticResource HorizontalHeaderStyle}"
                                                     ElementStyle="{StaticResource DefaultTextColumnStyle}"
                                                     CellStyle="{StaticResource Moccasin}"
                                                     Header="Level" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <StackPanel Grid.Row="1"
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="1"
                                     Orientation="Horizontal">
-                            <Button Content="Get Sections By Panel"
+                        <Button Content="Get Sections By Panel"
                                     Width="150"
                                     Height="23"
                                     Command="{Binding Suggest_Section}"></Button>
-                            <Button Content="Modify Panel Drawings"
+                        <Button Content="Modify Panel Drawings"
                                     Width="150"
                                     Height="23"
                                     Command="{Binding Modify_Drawing}"></Button>
-                        </StackPanel>
-                    </Grid>
-                </GroupBox>
-            </Grid>
-        </materialDesign:Card>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Column="0"
+                          Grid.ColumnSpan="2"
+                          Grid.Row="1"
+                          Margin="0"
+                          Header ="Message">
+                <RichTextBox IsReadOnly="True"
+                             BorderThickness="1"
+                             Name="MessageTextBox"
+                             helpers:RichTextBoxHelper.BoundDocument="{Binding LogDocument}"/>
+            </GroupBox>
+        </Grid>
     </Grid>
 </tsd:ApplicationWindowBase>
